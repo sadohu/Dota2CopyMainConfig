@@ -17,7 +17,7 @@ from ..core.steam_service import SteamAccountService, AccountFilterService, Vali
 from ..core.config_service import ConfigurationService, FileCopyService
 from ..core.steam_config_service import SteamConfigurationService
 from ..models.domain_models import SteamAccount, AppSelection, CopyOperation, AppConfig
-from ..utils.ui_utils import MessageHelper, IconHelper
+from ..utils.ui_utils import MessageHelper, IconHelper, AboutDialog
 from ..utils.logging_utils import LoggingMixin, OperationContext
 from config.settings import (
     APP_NAME, APP_VERSION, APP_AUTHOR, APP_DESCRIPTION, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT,
@@ -525,16 +525,27 @@ Desarrollado por {APP_AUTHOR}
 
 {APP_DESCRIPTION}
 
-Arquitectura Modular v2.0
+Arquitectura Modular v2.1
 - Separación de responsabilidades
 - Principios SOLID aplicados
 - Testing automatizado
 - Logging avanzado
+- Layout responsivo con Grid
+- Sistema de ignorar cuentas
 
-Steam configurado en: {self.app_config.custom_steam_path or 'Detección automática'}
-"""
+📞 Contacto y Soporte:
+Discord: Sadohu
+🔗 Unirse al Discord: https://discord.gg/MYNyKQvk
+GitHub: Sadohu
+
+🔗 Repositorio del Proyecto:
+https://github.com/sadohu/Dota2CopyMainConfig
+
+Steam configurado en: {self.app_config.custom_steam_path or 'Detección automática'}"""
         
-        MessageHelper.show_info("Acerca de", about_text)
+        # Usar el nuevo diálogo personalizado
+        dialog = AboutDialog(self.root, "Acerca de", about_text)
+        dialog.show()
     
     def _on_closing(self) -> None:
         """Maneja el cierre de la aplicación."""

@@ -14,7 +14,7 @@ from typing import Dict, Any
 # ═══════════════════════════════════════════════════════════════════════════
 
 APP_NAME = "Dota 2 Config Copier"
-APP_VERSION = "2.1.0"
+APP_VERSION = "2.1.1"
 VERSION = APP_VERSION  # Alias para compatibilidad
 APP_AUTHOR = "Sadohu"
 APP_DESCRIPTION = "Aplicación para copiar configuraciones de Dota 2 entre cuentas de Steam"

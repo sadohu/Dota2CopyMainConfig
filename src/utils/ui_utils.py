@@ -471,3 +471,288 @@ class WidgetFactory:
             created_buttons.append(button)
         
         return created_buttons
+
+
+class AboutDialog:
+    """
+    Diálogo personalizado 'Acerca de' con texto seleccionable y enlaces clicables.
+    """
+    
+    def __init__(self, parent: tk.Tk, title: str, content: str):
+        """
+        Inicializa el diálogo Acerca de.
+        
+        Args:
+            parent: Ventana padre
+            title: Título del diálogo
+            content: Contenido del diálogo
+        """
+        self.parent = parent
+        self.title = title
+        self.content = content
+        self.dialog = None
+        
+    def show(self) -> None:
+        """Muestra el diálogo."""
+        # Crear ventana modal
+        self.dialog = tk.Toplevel(self.parent)
+        self.dialog.title(self.title)
+        self.dialog.transient(self.parent)
+        self.dialog.grab_set()
+        
+        # Configurar ventana
+        self.dialog.geometry("500x400")
+        self.dialog.resizable(False, False)
+        
+        # Centrar en la ventana padre
+        self._center_window()
+        
+        # Crear contenido
+        self._create_content()
+        
+        # Configurar cierre
+        self.dialog.protocol("WM_DELETE_WINDOW", self._on_close)
+        
+        # Enfocar diálogo
+        self.dialog.focus_set()
+        
+    def _center_window(self) -> None:
+        """Centra la ventana en la ventana padre."""
+        # Obtener posición de la ventana padre
+        parent_x = self.parent.winfo_x()
+        parent_y = self.parent.winfo_y()
+        parent_width = self.parent.winfo_width()
+        parent_height = self.parent.winfo_height()
+        
+        # Calcular posición centrada
+        dialog_width = 500
+        dialog_height = 400
+        x = parent_x + (parent_width - dialog_width) // 2
+        y = parent_y + (parent_height - dialog_height) // 2
+        
+        self.dialog.geometry(f"{dialog_width}x{dialog_height}+{x}+{y}")
+    
+    def _create_content(self) -> None:
+        """Crea el contenido del diálogo."""
+        # Frame principal
+        main_frame = ttk.Frame(self.dialog)
+        main_frame.pack(fill='both', expand=True, padx=20, pady=20)
+        
+        # Frame para el texto con scrollbar
+        text_frame = ttk.Frame(main_frame)
+        text_frame.pack(fill='both', expand=True)
+        
+        # Crear widget de texto con scrollbar
+        text_widget = tk.Text(
+            text_frame, 
+            wrap='word', 
+            font=("Arial", 10),
+            height=15,
+            width=50,
+            relief='solid',
+            borderwidth=1,
+            padx=10,
+            pady=10
+        )
+        
+        scrollbar = ttk.Scrollbar(text_frame, orient='vertical', command=text_widget.yview)
+        text_widget.configure(yscrollcommand=scrollbar.set)
+        
+        # Empaquetar widgets
+        text_widget.pack(side='left', fill='both', expand=True)
+        scrollbar.pack(side='right', fill='y')
+        
+        # Insertar contenido
+        self._insert_content(text_widget)
+        
+        # Hacer el texto solo lectura pero seleccionable
+        text_widget.configure(state='disabled')
+        
+        # Frame para botones
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(fill='x', pady=(10, 0))
+        
+        # Botón Cerrar
+        close_btn = ttk.Button(
+            button_frame, 
+            text="Cerrar", 
+            command=self._on_close
+        )
+        close_btn.pack(side='right')
+        
+        # Botón Copiar link del Repositorio
+        copy_repo_btn = ttk.Button(
+            button_frame, 
+            text="📋 Copiar link del Repositorio", 
+            command=self._copy_repository_link
+        )
+        copy_repo_btn.pack(side='right', padx=(0, 10))
+        
+        # Botón Copiar link de Discord
+        copy_discord_btn = ttk.Button(
+            button_frame, 
+            text="💬 Copiar link de Discord", 
+            command=self._copy_discord_link
+        )
+        copy_discord_btn.pack(side='right', padx=(0, 10))
+    
+    def _insert_content(self, text_widget: tk.Text) -> None:
+        """
+        Inserta el contenido en el widget de texto con formato y enlaces.
+        
+        Args:
+            text_widget: Widget de texto donde insertar
+        """
+        # Habilitar edición temporalmente
+        text_widget.configure(state='normal')
+        
+        lines = self.content.split('\n')
+        
+        for line in lines:
+            if line.strip() == "":
+                text_widget.insert('end', '\n')
+                continue
+                
+            # Detectar y procesar enlaces
+            if 'https://' in line:
+                self._insert_line_with_links(text_widget, line)
+            # Detectar líneas de contacto
+            elif 'Discord:' in line or 'GitHub:' in line:
+                self._insert_contact_line(text_widget, line)
+            else:
+                text_widget.insert('end', line + '\n')
+        
+        # Deshabilitar edición
+        text_widget.configure(state='disabled')
+    
+    def _insert_line_with_links(self, text_widget: tk.Text, line: str) -> None:
+        """
+        Inserta una línea que contiene enlaces clicables.
+        
+        Args:
+            text_widget: Widget de texto
+            line: Línea con enlaces
+        """
+        import re
+        
+        # Buscar URLs en la línea
+        url_pattern = r'https://[^\s]+'
+        urls = re.findall(url_pattern, line)
+        
+        if urls:
+            # Dividir la línea en partes
+            parts = re.split(url_pattern, line)
+            
+            for i, part in enumerate(parts):
+                text_widget.insert('end', part)
+                
+                # Insertar URL después de cada parte (excepto la última)
+                if i < len(urls):
+                    url = urls[i]
+                    start_pos = text_widget.index('end-1c')
+                    text_widget.insert('end', url)
+                    end_pos = text_widget.index('end-1c')
+                    
+                    # Configurar tag para el enlace
+                    tag_name = f"link_{i}"
+                    text_widget.tag_add(tag_name, start_pos, end_pos)
+                    text_widget.tag_configure(tag_name, 
+                                            foreground="blue", 
+                                            underline=True)
+                    
+                    # Bind click event
+                    text_widget.tag_bind(tag_name, "<Button-1>", 
+                                       lambda e, url=url: self._open_url(url))
+                    text_widget.tag_bind(tag_name, "<Enter>", 
+                                       lambda e: text_widget.configure(cursor="hand2"))
+                    text_widget.tag_bind(tag_name, "<Leave>", 
+                                       lambda e: text_widget.configure(cursor=""))
+        
+        text_widget.insert('end', '\n')
+    
+    def _insert_contact_line(self, text_widget: tk.Text, line: str) -> None:
+        """
+        Inserta una línea de contacto con el nombre seleccionable.
+        
+        Args:
+            text_widget: Widget de texto
+            line: Línea de contacto
+        """
+        if ':' in line:
+            prefix, name = line.split(':', 1)
+            text_widget.insert('end', prefix + ': ')
+            
+            # Insertar nombre con tag especial
+            start_pos = text_widget.index('end-1c')
+            text_widget.insert('end', name.strip())
+            end_pos = text_widget.index('end-1c')
+            
+            # Configurar tag para nombre seleccionable
+            tag_name = f"contact_{prefix.strip().lower()}"
+            text_widget.tag_add(tag_name, start_pos, end_pos)
+            text_widget.tag_configure(tag_name, 
+                                    foreground="darkblue", 
+                                    font=("Arial", 10, "bold"))
+        else:
+            text_widget.insert('end', line)
+            
+        text_widget.insert('end', '\n')
+    
+    def _open_url(self, url: str) -> None:
+        """
+        Abre una URL en el navegador predeterminado.
+        
+        Args:
+            url: URL a abrir
+        """
+        import webbrowser
+        try:
+            webbrowser.open(url)
+        except Exception as e:
+            MessageHelper.show_error(
+                "Error", 
+                f"No se pudo abrir el enlace:\n{url}\n\nError: {str(e)}"
+            )
+    
+    def _copy_discord_link(self) -> None:
+        """Copia el enlace de Discord al portapapeles."""
+        discord_link = "https://discord.gg/MYNyKQvk"
+        
+        try:
+            self.dialog.clipboard_clear()
+            self.dialog.clipboard_append(discord_link)
+            
+            # Mostrar confirmación temporal
+            MessageHelper.show_info(
+                "Copiado", 
+                "Enlace de Discord copiado al portapapeles"
+            )
+        except Exception:
+            MessageHelper.show_error(
+                "Error", 
+                "No se pudo copiar al portapapeles"
+            )
+    
+    def _copy_repository_link(self) -> None:
+        """Copia el enlace del repositorio al portapapeles."""
+        repo_link = "https://github.com/sadohu/Dota2CopyMainConfig"
+        
+        try:
+            self.dialog.clipboard_clear()
+            self.dialog.clipboard_append(repo_link)
+            
+            # Mostrar confirmación temporal
+            MessageHelper.show_info(
+                "Copiado", 
+                "Enlace del repositorio copiado al portapapeles"
+            )
+        except Exception:
+            MessageHelper.show_error(
+                "Error", 
+                "No se pudo copiar al portapapeles"
+            )
+    
+    def _on_close(self) -> None:
+        """Maneja el cierre del diálogo."""
+        self.dialog.grab_release()
+        self.dialog.destroy()

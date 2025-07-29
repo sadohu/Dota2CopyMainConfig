@@ -5,6 +5,67 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [v2.1.1] - 2025-07-29 🔧 CORRECCIONES CRÍTICAS DE GUI
+
+### 🐛 **CORRECCIONES CRÍTICAS**
+- **Problema de layout GUI**: Corregido problema donde elementos "origen-destino" y botones de acción no eran completamente visibles
+- **Sistema de ignorar cuentas**: Corregido problema donde la función "ignorar" no actualizaba las listas en tiempo real
+- **Sincronización de configuración**: Corregido desincronización entre instancias de configuración que causaba que los cambios no se reflejaran inmediatamente
+
+### 🔧 **MEJORAS TÉCNICAS**
+- **Layout responsivo con Grid**: Reemplazado sistema Pack por Grid layout para control preciso de posicionamiento
+  - Widgets de estado y botones ahora siempre visibles en posiciones fijas
+  - Notebook expansible pero respetando espacio reservado para controles
+  - Configuración de peso para expansión controlada de elementos
+- **Canvas con scroll**: Implementado sistema de scroll para listas de cuentas largas
+  - Scroll vertical con rueda del mouse
+  - Navegación fluida manteniendo elementos de control siempre visibles
+- **Actualización forzada de interfaz**: Agregado `update_idletasks()` para forzar redibujado inmediato de widgets
+
+### 🔄 **CORRECCIONES DE SINCRONIZACIÓN**
+- **Referencia de configuración**: Agregada sincronización `self.app_config = self.config_service.config` después de ignorar/restaurar cuentas
+- **Actualización en tiempo real**: Las listas de cuentas disponibles e ignoradas ahora se actualizan inmediatamente sin necesidad de reiniciar
+- **Validación mejorada**: Agregada verificación de duplicados antes de ignorar cuentas con mensaje informativo
+
+### 🖥️ **MEJORAS DE UX**
+- **Diálogos modales mejorados**: Configuración `topmost` temporal para asegurar visibilidad de confirmaciones
+- **Mensajes de éxito/error**: Agregados mensajes informativos después de ignorar/restaurar cuentas exitosamente
+- **Validación de estados**: Verificación de cuentas ya ignoradas con mensaje informativo apropiado
+- **AboutDialog interactivo**: Nuevo diálogo "Acerca de" con funcionalidades avanzadas
+  - Texto seleccionable para copiar información
+  - Enlaces clickeables (GitHub repository y Discord invite)
+  - Botones específicos de copia: "💬 Copiar link de Discord" y "📋 Copiar link del Repositorio"
+  - Información de contacto completa: Discord: Sadohu, GitHub: Sadohu
+  - Enlace directo para unirse al Discord: https://discord.gg/MYNyKQvk
+  - Copia directa de enlaces al portapapeles con confirmación visual
+
+### 📊 **LOGGING DETALLADO**
+- **Trazabilidad completa**: Logs detallados de todas las operaciones de ignorar/restaurar
+- **Información de estado**: Logs con conteo preciso de cuentas disponibles/ignoradas después de cada operación
+- **Seguimiento de sincronización**: Verificación en logs de actualización correcta de listas
+
+### ✅ **VALIDACIÓN DE FUNCIONAMIENTO**
+- ✅ Layout responsivo: Elementos siempre visibles independientemente del tamaño de ventana
+- ✅ Scroll funcional: Navegación fluida en listas largas de cuentas
+- ✅ Ignorar en tiempo real: Cuentas se mueven inmediatamente entre pestañas
+- ✅ Restaurar en tiempo real: Cuentas restauradas aparecen inmediatamente en disponibles
+- ✅ Persistencia correcta: Cambios se guardan correctamente en archivo JSON
+- ✅ UX mejorada: Confirmaciones claras y mensajes informativos
+
+### 📁 **REORGANIZACIÓN DE ESTRUCTURA**
+- **Directorio raíz limpio**: Movidos archivos de documentación duplicados y scripts auxiliares
+- **Scripts organizados**: Todos los scripts de testing/verificación movidos a `tests/scripts/`
+- **Documentación centralizada**: Archivos técnicos consolidados en `docs/`
+- **Estructura profesional**: Directorio raíz solo con archivos esenciales para mejor navegación
+
+### 📋 **ARCHIVOS REORGANIZADOS**
+- `test_*.py` y `verificar_*.py` → `tests/scripts/`
+- Documentación técnica mantenida en `docs/`
+- `README.md` creado para `tests/scripts/` con documentación de scripts auxiliares
+- `REORGANIZACION_v2.1.1.md` documenta todos los cambios estructurales
+
+---
+
 ## [v2.1.0] - 2025-07-29 🔧 CONFIGURACIÓN AVANZADA DE STEAM
 
 ### ✨ **NUEVAS FUNCIONALIDADES**
