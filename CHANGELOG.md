@@ -53,7 +53,17 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 - ✅ Persistencia correcta: Cambios se guardan correctamente en archivo JSON
 - ✅ UX mejorada: Confirmaciones claras y mensajes informativos
 
-### 📁 **REORGANIZACIÓN DE ESTRUCTURA**
+### � **DISTRIBUCIÓN Y PACKAGING**
+- **Ejecutable standalone v2.1.1**: Generado con PyInstaller
+  - Archivo: `Dota2ConfigCopier_v2.1.1.exe` (~14.6 MB)
+  - Sin dependencias externas (Python embebido)
+  - Compresión UPX para tamaño optimizado
+  - Icono y recursos integrados
+  - Compatible con Windows 10/11 (64-bit)
+- **README de distribución**: Documentación completa para usuarios finales
+- **Configuración de build**: Spec file optimizado con exclusiones y optimizaciones
+
+### �📁 **REORGANIZACIÓN DE ESTRUCTURA**
 - **Directorio raíz limpio**: Movidos archivos de documentación duplicados y scripts auxiliares
 - **Scripts organizados**: Todos los scripts de testing/verificación movidos a `tests/scripts/`
 - **Documentación centralizada**: Archivos técnicos consolidados en `docs/`
