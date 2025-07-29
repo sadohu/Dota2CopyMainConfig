@@ -6,6 +6,9 @@ import json
 import re
 from PIL import Image, ImageTk
 
+# Dota 2 Config Copier v1.3 - By Sadohu
+# Aplicación para copiar configuraciones de Dota 2 entre cuentas de Steam
+
 STEAM_USERDATA_PATH = r"C:\Program Files (x86)\Steam\userdata"
 AVATAR_CACHE_PATH = r"C:\Program Files (x86)\Steam\config\avatarcache"
 CACHE_FILE = "ultima_seleccion.json"
