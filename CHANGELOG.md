@@ -21,6 +21,7 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
   - Scroll vertical con rueda del mouse
   - Navegación fluida manteniendo elementos de control siempre visibles
 - **Actualización forzada de interfaz**: Agregado `update_idletasks()` para forzar redibujado inmediato de widgets
+- **Dimensiones de ventana optimizadas**: Altura mínima y por defecto aumentada a 800px para mejor visualización
 
 ### 🔄 **CORRECCIONES DE SINCRONIZACIÓN**
 - **Referencia de configuración**: Agregada sincronización `self.app_config = self.config_service.config` después de ignorar/restaurar cuentas
