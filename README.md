@@ -2,10 +2,30 @@
 
 Una aplicación de escritorio para copiar configuraciones de Dota 2 entre cuentas de Steam de manera sencilla y eficiente.
 
-![Version](https://img.shields.io/badge/version-v1.3-blue)
+![Version](https://img.shields.io/badge/version-v2.0.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![Language](https://img.shields.io/badge/language-Python-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
+![Architecture](https://img.shields.io/badge/architecture-modular-brightgreen)
+
+## 🚀 ¡Nuevo en v2.0! - Arquitectura Modular
+
+La versión 2.0 presenta una **refactorización completa** con arquitectura modular que mejora significativamente la mantenibilidad, extensibilidad y robustez del código:
+
+### 🏗️ Beneficios de la Nueva Arquitectura
+- **Código Modular**: Separación clara de responsabilidades
+- **Fácil Mantenimiento**: Estructura organizada y documentada
+- **Testing Automatizado**: Suite completa de tests unitarios
+- **Logging Avanzado**: Sistema de logging detallado para debugging
+- **Extensibilidad**: Base sólida para futuras mejoras
+- **Principios SOLID**: Aplicación de mejores prácticas de desarrollo
+
+### 📊 Mejoras Técnicas
+- **Servicios de Negocio**: Lógica separada en servicios especializados
+- **Modelos de Dominio**: Entidades robustas con validaciones integradas
+- **Componentes UI Reutilizables**: Widgets modulares y consistentes
+- **Configuración Centralizada**: Settings unificados y flexibles
+- **Manejo de Errores**: Sistema robusto de manejo de excepciones
 
 ## 📋 Descripción
 
@@ -59,30 +79,45 @@ Una aplicación de escritorio para copiar configuraciones de Dota 2 entre cuenta
 ## 🛠️ Requisitos del Sistema
 
 - **Sistema Operativo**: Windows 7/8/10/11
-- **Python**: 3.6 o superior
+- **Python**: 3.7 o superior (para ejecutar desde código fuente)
 - **Steam**: Instalado con al menos una cuenta que tenga Dota 2
-- **Librerías Python**:
+- **Librerías Python** (instalación automática con `pip install -r requirements.txt`):
   - `tkinter` (incluida con Python)
   - `Pillow` (PIL) - Para manejo de imágenes
   - `json` (incluida con Python)
 
+### Dependencias Opcionales de Desarrollo
+- `pytest` - Para ejecutar tests automatizados
+- `black` - Para formateo de código
+- `mypy` - Para verificación de tipos
+
 ## 📦 Instalación
 
-### Opción 1: Ejecutable (Recomendado)
+### Opción 1: Ejecutable (Recomendado para usuarios)
 1. Descargar el archivo `dota_main_config.exe`
 2. Colocar en cualquier carpeta
 3. Ejecutar como administrador (recomendado)
 
-### Opción 2: Código Fuente
-1. Instalar Python 3.6+
-2. Instalar dependencias:
-   ```bash
-   pip install Pillow
-   ```
-3. Ejecutar:
-   ```bash
-   python dota_main_config.py
-   ```
+### Opción 2: Código Fuente (Recomendado para desarrolladores)
+
+#### Versión 2.0 - Arquitectura Modular
+```bash
+# Clonar repositorio
+git clone [url-del-repo]
+cd dota2-config-copier
+
+# Instalar dependencias
+pip install -r requirements.txt
+
+# Ejecutar aplicación modular
+python main.py
+```
+
+#### Versión 1.3 - Legacy (Compatible)
+```bash
+# Ejecutar versión anterior
+python dota_main_config.py
+```
 
 ## 🚀 Uso
 
@@ -105,18 +140,46 @@ Una aplicación de escritorio para copiar configuraciones de Dota 2 entre cuenta
 
 ## 📁 Estructura de Archivos
 
+### v2.0 - Arquitectura Modular
 ```
 dota2-config-copier/
-├── dota_main_config.py      # Aplicación principal
-├── dota2.ico                # Icono de la aplicación
-├── ultima_seleccion.json    # Configuraciones del usuario
-├── README.md                # Este archivo
-├── CHANGELOG.md             # Historial de cambios
-└── docs/                    # Documentación adicional
-    ├── ICONOS_IMPLEMENTADOS.md
-    ├── PAGINACION_IMPLEMENTADA.md
-    └── CAMBIOS_IMPLEMENTADOS.md
+├── main.py                      # 🚀 Punto de entrada principal
+├── src/                         # 📦 Código fuente modular
+│   ├── models/                  # 🏗️ Modelos de dominio
+│   │   └── domain_models.py     # Entidades y objetos de valor
+│   ├── core/                    # 💼 Lógica de negocio
+│   │   ├── steam_service.py     # Servicios de Steam
+│   │   └── config_service.py    # Servicios de configuración
+│   ├── gui/                     # 🖥️ Interfaz de usuario
+│   │   ├── main_app.py         # Aplicación principal
+│   │   ├── main_tab.py         # Componentes pestaña principal
+│   │   └── ignored_tab.py      # Componentes pestaña ignoradas
+│   └── utils/                   # 🔧 Utilidades
+│       ├── logging_utils.py     # Sistema de logging
+│       └── ui_utils.py         # Utilidades de interfaz
+├── config/                      # ⚙️ Configuración
+│   └── settings.py             # Constantes y configuraciones
+├── tests/                       # 🧪 Tests automatizados
+│   └── test_refactor.py        # Tests de validación
+├── docs/                        # 📚 Documentación
+│   ├── ARQUITECTURA_MODULAR.md  # Documentación técnica
+│   ├── ICONOS_IMPLEMENTADOS.md
+│   ├── PAGINACION_IMPLEMENTADA.md
+│   └── CAMBIOS_IMPLEMENTADOS.md
+├── requirements.txt             # 📋 Dependencias
+├── dota_main_config.py         # 🔄 Versión legacy (v1.3)
+├── ultima_seleccion.json       # 💾 Configuración del usuario
+├── dota2.ico                   # 🎨 Icono de la aplicación
+├── README.md                   # 📖 Este archivo
+├── CHANGELOG.md                # 📝 Historial de cambios
+└── LICENSE                     # 📄 Licencia MIT
 ```
+
+### Migración de v1.3 a v2.0
+- ✅ **Compatibilidad completa**: Tus configuraciones se migran automáticamente
+- ✅ **Funcionalidad idéntica**: Todas las características de v1.3 están disponibles
+- ✅ **Ambas versiones**: Puedes usar v1.3 (`dota_main_config.py`) o v2.0 (`main.py`)
+- ✅ **Datos conservados**: Configuraciones, cuentas ignoradas y preferencias se mantienen
 
 ## ⚙️ Configuración
 
@@ -187,15 +250,28 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
 ## 📈 Roadmap
 
-### v1.4 (Próxima)
+### v2.1 (Próxima) - Mejoras Incrementales
+- [ ] Sistema de plugins para extensibilidad
+- [ ] Configuración avanzada por archivo YAML
+- [ ] Tests automatizados completos con CI/CD
+- [ ] Optimizaciones de rendimiento
+
+### v2.2 - Funcionalidades Avanzadas
 - [ ] Backup automático antes de copiar
 - [ ] Soporte para configuraciones específicas (solo hotkeys, solo video, etc.)
 - [ ] Modo portable (sin instalación)
+- [ ] Perfiles de configuración múltiples
 
-### v1.5 (Futuro)
+### v2.5 - Expansión Multi-Juego
 - [ ] Soporte para otros juegos de Steam
-- [ ] Interfaz web opcional
+- [ ] Sistema de plantillas de configuración
 - [ ] Sincronización automática entre cuentas
+
+### v3.0 - Arquitectura Distribuida
+- [ ] Interfaz web opcional
+- [ ] API REST para integración
+- [ ] Soporte para múltiples plataformas (Linux, macOS)
+- [ ] Base de datos externa opcional
 
 ## 📞 Soporte
 

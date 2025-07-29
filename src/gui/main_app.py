@@ -1,0 +1,485 @@
+"""
+Aplicación principal de Dota 2 Config Copier - Versión modular 2.0.
+
+Este módulo contiene la clase principal de la aplicación que coordina
+todos los componentes siguiendo principios de arquitectura limpia.
+"""
+
+import tkinter as tk
+from tkinter import ttk
+from typing import List, Optional
+from pathlib import Path
+
+# Imports locales
+from .main_tab import AccountListWidget, StatusWidget, ActionButtonsWidget
+from .ignored_tab import IgnoredTabController
+from ..core.steam_service import SteamAccountService, AccountFilterService, ValidationService
+from ..core.config_service import ConfigurationService, FileCopyService
+from ..models.domain_models import SteamAccount, AppSelection, CopyOperation, AppConfig
+from ..utils.ui_utils import MessageHelper, IconHelper
+from ..utils.logging_utils import LoggingMixin, OperationContext
+from config.settings import (
+    APP_NAME, APP_VERSION, APP_AUTHOR, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT,
+    WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT, ICON_PATH, MESSAGES
+)
+
+
+class Dota2ConfigCopierApp(LoggingMixin):
+    """
+    Aplicación principal de Dota 2 Config Copier.
+    
+    Coordina todos los servicios y componentes de la interfaz,
+    siguiendo el patrón MVC y principios de responsabilidad única.
+    """
+    
+    def __init__(self, root: tk.Tk):
+        """
+        Inicializa la aplicación principal.
+        
+        Args:
+            root: Ventana principal de Tkinter
+        """
+        self.root = root
+        
+        # Inicializar servicios
+        self._init_services()
+        
+        # Estado de la aplicación
+        self.all_accounts: List[SteamAccount] = []
+        self.available_accounts: List[SteamAccount] = []
+        self.ignored_accounts: List[SteamAccount] = []
+        self.current_selection = AppSelection()
+        
+        # Componentes de interfaz
+        self.main_tab_widget: Optional[AccountListWidget] = None
+        self.ignored_tab_controller: Optional[IgnoredTabController] = None
+        self.status_widget: Optional[StatusWidget] = None
+        self.action_buttons: Optional[ActionButtonsWidget] = None
+        
+        # Configurar aplicación
+        self._setup_application()
+        self._create_interface()
+        self._load_initial_data()
+    
+    def _init_services(self) -> None:
+        """Inicializa todos los servicios de la aplicación."""
+        self.steam_service = SteamAccountService()
+        self.filter_service = AccountFilterService()
+        self.validation_service = ValidationService()
+        self.config_service = ConfigurationService()
+        self.file_service = FileCopyService(enable_backup=True)
+        
+        self.logger.info("Servicios inicializados correctamente")
+    
+    def _setup_application(self) -> None:
+        """Configura la ventana principal y propiedades de la aplicación."""
+        # Título de la ventana
+        title = f"{APP_NAME} v{APP_VERSION} - {APP_AUTHOR}"
+        self.root.title(title)
+        
+        # Tamaño y posición de ventana
+        self.root.geometry(f"{WINDOW_DEFAULT_WIDTH}x{WINDOW_DEFAULT_HEIGHT}")
+        self.root.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
+        
+        # Icono de la aplicación
+        icon_path = Path(ICON_PATH)
+        if icon_path.exists():
+            try:
+                self.root.iconbitmap(str(icon_path))
+            except tk.TclError:
+                self.logger.warning(f"No se pudo cargar el icono: {icon_path}")
+        
+        # Configurar cierre de aplicación
+        self.root.protocol("WM_DELETE_WINDOW", self._on_closing)
+        
+        self.logger.info(f"Aplicación configurada: {title}")
+    
+    def _create_interface(self) -> None:
+        """Crea la interfaz de usuario completa."""
+        with OperationContext("create_interface", self.logger):
+            # Crear notebook para pestañas
+            self.notebook = ttk.Notebook(self.root)
+            self.notebook.pack(fill='both', expand=True, padx=10, pady=10)
+            
+            # Crear pestañas
+            self._create_main_tab()
+            self._create_ignored_tab()
+            
+            # Crear widgets de estado y acciones
+            self._create_status_widgets()
+    
+    def _create_main_tab(self) -> None:
+        """Crea la pestaña principal de cuentas disponibles."""
+        # Frame de la pestaña
+        main_frame = ttk.Frame(self.notebook)
+        self.notebook.add(main_frame, text="Cuentas Disponibles")
+        
+        # Widget principal de lista de cuentas
+        self.main_tab_widget = AccountListWidget(
+            main_frame, 
+            "Cuentas Steam con Dota 2 detectadas"
+        )
+        
+        # Configurar callbacks
+        self.main_tab_widget.on_selection_changed = self._on_selection_changed
+        self.main_tab_widget.on_account_ignored = self._on_account_ignored
+    
+    def _create_ignored_tab(self) -> None:
+        """Crea la pestaña de cuentas ignoradas."""
+        # Frame de la pestaña
+        ignored_frame = ttk.Frame(self.notebook)
+        self.notebook.add(ignored_frame, text="Cuentas Ignoradas")
+        
+        # Controlador de la pestaña ignoradas
+        self.ignored_tab_controller = IgnoredTabController(ignored_frame)
+        self.ignored_tab_controller.on_account_restored = self._on_account_restored
+    
+    def _create_status_widgets(self) -> None:
+        """Crea los widgets de estado y botones de acción."""
+        # Widget de estado
+        self.status_widget = StatusWidget(self.root)
+        
+        # Botones de acción
+        self.action_buttons = ActionButtonsWidget(self.root)
+        self.action_buttons.on_copy_clicked = self._on_copy_configuration
+        self.action_buttons.on_cancel_clicked = self._on_cancel_selection
+    
+    def _load_initial_data(self) -> None:
+        """Carga los datos iniciales de la aplicación."""
+        with OperationContext("load_initial_data", self.logger):
+            # Validar instalación de Steam
+            is_valid, error_msg = self.validation_service.validate_steam_paths()
+            if not is_valid:
+                MessageHelper.show_error("Error", error_msg)
+                return
+            
+            # Detectar cuentas de Steam
+            self.all_accounts = self.steam_service.find_accounts_with_dota2()
+            
+            if not self.all_accounts:
+                MessageHelper.show_warning("Aviso", MESSAGES["no_accounts"])
+                return
+            
+            # Cargar configuración guardada
+            self._load_saved_configuration()
+            
+            # Actualizar interfaz
+            self._refresh_account_lists()
+            self._restore_previous_selection()
+    
+    def _load_saved_configuration(self) -> None:
+        """Carga la configuración guardada previamente."""
+        config = self.config_service.config
+        
+        # Configurar paginación en widgets
+        if self.main_tab_widget:
+            self.main_tab_widget.pagination.items_per_page = config.items_por_pagina
+        
+        if self.ignored_tab_controller:
+            self.ignored_tab_controller.set_items_per_page(config.items_por_pagina)
+        
+        self.logger.info("Configuración cargada correctamente")
+    
+    def _refresh_account_lists(self) -> None:
+        """Actualiza las listas de cuentas disponibles e ignoradas."""
+        ignored_ids = self.config_service.get_ignored_accounts()
+        
+        # Filtrar cuentas
+        self.available_accounts = self.filter_service.filter_available_accounts(
+            self.all_accounts, ignored_ids
+        )
+        self.ignored_accounts = self.filter_service.filter_ignored_accounts(
+            self.all_accounts, ignored_ids
+        )
+        
+        # Actualizar widgets
+        if self.main_tab_widget:
+            self.main_tab_widget.set_accounts(self.available_accounts)
+        
+        if self.ignored_tab_controller:
+            self.ignored_tab_controller.set_ignored_accounts(self.ignored_accounts)
+        
+        self.logger.info(f"Listas actualizadas: {len(self.available_accounts)} disponibles, "
+                        f"{len(self.ignored_accounts)} ignoradas")
+    
+    def _restore_previous_selection(self) -> None:
+        """Restaura la selección previa guardada."""
+        config = self.config_service.config
+        
+        # Buscar cuentas de la selección previa
+        if config.origen:
+            origen_account = self.filter_service.find_account_by_id(
+                self.available_accounts, config.origen
+            )
+            if origen_account:
+                self.current_selection.set_origen(origen_account)
+                # Navegar a la página de la cuenta origen
+                if self.main_tab_widget:
+                    self.main_tab_widget.navigate_to_account(origen_account)
+        
+        if config.destino:
+            destino_account = self.filter_service.find_account_by_id(
+                self.available_accounts, config.destino
+            )
+            if destino_account:
+                self.current_selection.set_destino(destino_account)
+                # Si no hay origen, navegar a destino
+                if not self.current_selection.origen and self.main_tab_widget:
+                    self.main_tab_widget.navigate_to_account(destino_account)
+        
+        # Actualizar interfaz con selección restaurada
+        self._update_ui_selection()
+        
+        if self.current_selection.is_complete:
+            self.logger.info("Selección previa restaurada correctamente")
+    
+    def _update_ui_selection(self) -> None:
+        """Actualiza la interfaz con la selección actual."""
+        # Actualizar widget principal
+        if self.main_tab_widget:
+            self.main_tab_widget.set_selection(self.current_selection)
+        
+        # Actualizar widget de estado
+        if self.status_widget:
+            self.status_widget.update_status(self.current_selection)
+        
+        # Actualizar botones de acción
+        if self.action_buttons:
+            self.action_buttons.update_selection(self.current_selection)
+    
+    # ═══════════════════════════════════════════════════════════════════════
+    # Event Handlers
+    # ═══════════════════════════════════════════════════════════════════════
+    
+    def _on_selection_changed(self, selection: AppSelection) -> None:
+        """
+        Maneja el cambio en la selección de cuentas.
+        
+        Args:
+            selection: Nueva selección
+        """
+        self.current_selection = selection
+        
+        # Guardar selección
+        origen_id = selection.origen.steamid if selection.origen else ""
+        destino_id = selection.destino.steamid if selection.destino else ""
+        self.config_service.update_selection(origen_id, destino_id)
+        
+        # Actualizar interfaz
+        self._update_ui_selection()
+        
+        self.log_method_call("selection_changed", 
+                            origen=origen_id, destino=destino_id)
+    
+    def _on_account_ignored(self, account: SteamAccount) -> None:
+        """
+        Maneja la solicitud de ignorar una cuenta.
+        
+        Args:
+            account: Cuenta a ignorar
+        """
+        # Confirmar con el usuario
+        confirm = MessageHelper.ask_confirmation(
+            "Confirmar",
+            MESSAGES["confirm_ignore"].format(account.nombre)
+        )
+        
+        if not confirm:
+            return
+        
+        # Ignorar cuenta
+        self.config_service.ignore_account(account.steamid)
+        
+        # Limpiar selección si la cuenta ignorada estaba seleccionada
+        if self.current_selection.has_account(account):
+            self.current_selection.clear()
+            self._on_selection_changed(self.current_selection)
+        
+        # Actualizar listas
+        self._refresh_account_lists()
+        
+        self.log_method_call("account_ignored", account=account.steamid)
+    
+    def _on_account_restored(self, account: SteamAccount) -> None:
+        """
+        Maneja la restauración de una cuenta ignorada.
+        
+        Args:
+            account: Cuenta a restaurar
+        """
+        # Restaurar cuenta
+        self.config_service.restore_account(account.steamid)
+        
+        # Actualizar listas
+        self._refresh_account_lists()
+        
+        self.log_method_call("account_restored", account=account.steamid)
+    
+    def _on_copy_configuration(self) -> None:
+        """Maneja la solicitud de copiar configuración."""
+        if not self.current_selection.is_valid:
+            MessageHelper.show_error("Error", "Selección inválida para copia")
+            return
+        
+        # Confirmar operación
+        confirm = MessageHelper.ask_confirmation(
+            "Confirmar",
+            MESSAGES["confirm_copy"].format(
+                self.current_selection.origen.nombre,
+                self.current_selection.destino.nombre
+            )
+        )
+        
+        if not confirm:
+            return
+        
+        # Crear operación de copia
+        copy_operation = CopyOperation(
+            origen=self.current_selection.origen,
+            destino=self.current_selection.destino,
+            backup_enabled=self.config_service.config.auto_backup
+        )
+        
+        # Validar operación
+        is_valid, error_msg = self.validation_service.validate_copy_operation(
+            copy_operation.origen, copy_operation.destino
+        )
+        
+        if not is_valid:
+            MessageHelper.show_error("Error de validación", error_msg)
+            return
+        
+        # Ejecutar copia
+        with OperationContext("copy_configuration", self.logger):
+            success, message = self.file_service.copy_configuration(copy_operation)
+            
+            if success:
+                MessageHelper.show_info("Éxito", MESSAGES["success_copy"], "success")
+                # Guardar selección exitosa
+                self.config_service.update_selection(
+                    self.current_selection.origen.steamid,
+                    self.current_selection.destino.steamid
+                )
+            else:
+                MessageHelper.show_error("Error", message)
+        
+        self.log_method_call("copy_configuration", 
+                            success=success, message=message)
+    
+    def _on_cancel_selection(self) -> None:
+        """Maneja la cancelación de la selección actual."""
+        self.current_selection.clear()
+        self._on_selection_changed(self.current_selection)
+        
+        self.log_method_call("cancel_selection")
+    
+    def _on_closing(self) -> None:
+        """Maneja el cierre de la aplicación."""
+        with OperationContext("application_closing", self.logger):
+            # Guardar configuración final
+            geometry = self.root.geometry()
+            self.config_service.update_window_geometry(geometry)
+            
+            # Limpiar recursos
+            self._cleanup_resources()
+            
+            # Cerrar aplicación
+            self.root.destroy()
+    
+    def _cleanup_resources(self) -> None:
+        """Limpia recursos antes del cierre."""
+        # Limpiar caché de avatares
+        if self.main_tab_widget:
+            self.main_tab_widget.avatar_manager.clear_cache()
+        
+        if self.ignored_tab_controller:
+            self.ignored_tab_controller.accounts_list.avatar_manager.clear_cache()
+        
+        # Limpiar backups antiguos
+        self.file_service.cleanup_old_backups()
+        
+        self.logger.info("Recursos limpiados correctamente")
+    
+    # ═══════════════════════════════════════════════════════════════════════
+    # Public API
+    # ═══════════════════════════════════════════════════════════════════════
+    
+    def refresh_accounts(self) -> None:
+        """
+        Actualiza la lista de cuentas detectadas.
+        
+        Método público para refrescar la detección de cuentas.
+        """
+        with OperationContext("refresh_accounts", self.logger):
+            self.all_accounts = self.steam_service.find_accounts_with_dota2()
+            self._refresh_account_lists()
+    
+    def get_application_info(self) -> dict:
+        """
+        Obtiene información de la aplicación.
+        
+        Returns:
+            Diccionario con información de la aplicación
+        """
+        return {
+            "name": APP_NAME,
+            "version": APP_VERSION,
+            "author": APP_AUTHOR,
+            "accounts_detected": len(self.all_accounts),
+            "accounts_available": len(self.available_accounts),
+            "accounts_ignored": len(self.ignored_accounts),
+            "current_selection": {
+                "origen": self.current_selection.origen.steamid if self.current_selection.origen else None,
+                "destino": self.current_selection.destino.steamid if self.current_selection.destino else None,
+                "is_valid": self.current_selection.is_valid
+            }
+        }
+
+
+def main():
+    """
+    Función principal para ejecutar la aplicación.
+    
+    Punto de entrada principal del programa.
+    """
+    from ..utils.logging_utils import setup_logging
+    
+    # Configurar logging
+    setup_logging("INFO")
+    
+    # Crear ventana principal
+    root = tk.Tk()
+    
+    try:
+        # Crear y ejecutar aplicación
+        app = Dota2ConfigCopierApp(root)
+        
+        # Mostrar información inicial
+        app_info = app.get_application_info()
+        app.logger.info(f"Aplicación iniciada: {app_info}")
+        
+        # Ejecutar loop principal
+        root.mainloop()
+        
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error fatal en la aplicación: {e}", exc_info=True)
+        
+        # Mostrar error al usuario
+        MessageHelper.show_error(
+            "Error Fatal",
+            f"La aplicación encontró un error fatal:\n{e}\n\n"
+            f"Consulta el archivo de log para más detalles."
+        )
+    
+    finally:
+        # Asegurar que la ventana se cierre
+        try:
+            root.destroy()
+        except:
+            pass
+
+
+if __name__ == "__main__":
+    main()

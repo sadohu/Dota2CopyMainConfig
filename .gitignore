@@ -1,0 +1,244 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# .gitignore para Dota 2 Config Copier v2.0
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS DE CONFIGURACIÓN Y DATOS LOCALES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Configuración local del usuario
+ultima_seleccion.json
+user_config.json
+app_config.json
+config_local.json
+
+# Logs de la aplicación
+*.log
+logs/
+app.log
+dota_config.log
+
+# Cache de la aplicación
+cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.cache/
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# BACKUPS Y ARCHIVOS TEMPORALES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Directorio completo de backups
+backups/
+backup_*/
+
+# Archivos temporales de configuración
+*.tmp
+*.temp
+*.bak
+*~
+.#*
+#*#
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# BUILDS Y DISTRIBUCIONES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# PyInstaller builds
+build/
+dist/
+*.spec
+
+# Archivos compilados
+*.exe
+*.msi
+*.dmg
+*.app
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ENTORNOS VIRTUALES Y DEPENDENCIAS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+.env/
+.virtualenv/
+
+# Conda environments
+conda-meta/
+.conda/
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# IDEs Y EDITORES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+.#*
+\#*\#
+*~
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS DEL SISTEMA OPERATIVO
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS DE TESTING Y COVERAGE
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# DATOS SENSIBLES Y ESPECÍFICOS DEL USUARIO
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Avatares descargados (específicos del usuario)
+avatars/
+avatar_cache/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.ico
+
+# Configuraciones específicas de Steam (contienen datos personales)
+steam_accounts.json
+accounts_cache.json
+
+# Configuraciones específicas del usuario local
+user_preferences.json
+local_settings.json
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS DE DOTA 2 (NO DEBEN SUBIRSE AL REPO)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Archivos de configuración de Dota 2
+*.vcfg
+*.vdf
+*.cfg
+
+# Directorio local de Steam
+local/
+remote/
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS PERMITIDOS ESPECÍFICAMENTE (comentarios informativos)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Los siguientes archivos SÍ se incluyen en el repositorio:
+# main.py                     - Punto de entrada v2.0
+# dota_main_config.py         - Versión legacy v1.3
+# config/settings.py          - Configuración base
+# src/                        - Código fuente modular
+# tests/                      - Tests automatizados
+# docs/                       - Documentación
+# requirements.txt            - Dependencias
+# README.md                   - Documentación principal
+# CHANGELOG.md                - Historial de cambios
+# *.md                        - Archivos de documentación
+# dota2.ico                   - Icono de la aplicación
+# verificar_proyecto.py       - Script de verificación
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# EXCEPCIONES ESPECÍFICAS
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Mantener estructura de directorios vacía si es necesario
+!.gitkeep
+
+# Ejemplo de configuración (plantilla)
+!config/settings_example.py
+!config/user_config_template.json
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# ARCHIVOS ESPECÍFICOS ADICIONALES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Archivos de errores y debugging
+error.log
+debug.log
+crash_*.log
+
+# Archivos de profiling
+*.prof
+profile_*.txt
+
+# Archivos de migración temporal
+migration_*.json
+temp_*.json
+
+# Base de datos local (si se implementa en el futuro)
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de configuración de herramientas
+.editorconfig.local
+.pylintrc.local

@@ -1,0 +1,18 @@
+# Dependencias para Dota 2 Config Copier v2.0
+# Instalación: pip install -r requirements.txt
+
+# Dependencias principales
+Pillow>=9.0.0              # Manejo de imágenes (avatares)
+
+# Dependencias de desarrollo (opcionales)
+# Descomenta si necesitas estas funcionalidades adicionales:
+
+# psutil>=5.8.0            # Monitoreo de sistema (para logging avanzado)
+# pytest>=7.0.0            # Framework de testing robusto
+# pytest-cov>=4.0.0        # Cobertura de tests
+# black>=22.0.0            # Formateador de código
+# flake8>=5.0.0            # Linter de código
+# mypy>=0.991              # Verificador de tipos estático
+
+# Nota: tkinter viene incluido con Python en la mayoría de instalaciones
+# Si usas una distribución mínima de Python, puede que necesites instalarlo separadamente

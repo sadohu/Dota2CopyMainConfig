@@ -5,6 +5,75 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [v2.0.0] - 2025-07-29 🚀 REFACTORIZACIÓN COMPLETA - ARQUITECTURA MODULAR
+
+### ✨ **NUEVA ARQUITECTURA MODULAR**
+- **Separación de responsabilidades**: Código organizado en módulos especializados
+- **Principios SOLID**: Aplicación completa de mejores prácticas de desarrollo
+- **Arquitectura en capas**: Domain, Application, Infrastructure separadas
+- **Servicios de negocio**: Lógica encapsulada en servicios dedicados
+- **Componentes UI reutilizables**: Widgets modulares y consistentes
+
+### 🏗️ **ESTRUCTURA MODULAR**
+- **`src/models/`**: Modelos de dominio (SteamAccount, PaginationInfo, AppConfig)
+- **`src/core/`**: Servicios de negocio (SteamAccountService, ConfigurationService)
+- **`src/gui/`**: Componentes de interfaz (AccountListWidget, PaginationWidget)
+- **`src/utils/`**: Utilidades comunes (LoggingMixin, AvatarManager)
+- **`config/`**: Configuración centralizada y constantes
+- **`tests/`**: Suite completa de tests automatizados
+
+### 🔧 **SERVICIOS ESPECIALIZADOS**
+- **SteamAccountService**: Detección y gestión de cuentas Steam
+- **AccountFilterService**: Filtrado y organización de cuentas
+- **ConfigurationService**: Gestión de configuración persistente
+- **FileCopyService**: Operaciones de copia con backup automático
+- **ValidationService**: Validaciones de negocio centralizadas
+
+### 🖥️ **COMPONENTES UI MODULARES**
+- **Dota2ConfigCopierApp**: Aplicación principal coordinadora (MVC)
+- **AccountListWidget**: Lista de cuentas con paginación integrada
+- **PaginationWidget**: Controles de paginación reutilizables
+- **StatusWidget**: Estado de selección con validación visual
+- **ActionButtonsWidget**: Botones de acción con habilitación condicional
+
+### 🧪 **TESTING AUTOMATIZADO**
+- **Tests unitarios**: Validación de modelos de dominio
+- **Tests de servicios**: Verificación de lógica de negocio
+- **Tests de paginación**: Validación de cálculos y navegación
+- **Ejecución**: `python -m tests.test_refactor`
+
+### 📊 **SISTEMA DE LOGGING**
+- **LoggingMixin**: Logging automático por clase
+- **PerformanceLogger**: Medición de tiempo de operaciones
+- **OperationContext**: Context manager para operaciones complejas
+- **Niveles configurables**: DEBUG, INFO, WARNING, ERROR
+
+### 🔄 **COMPATIBILIDAD TOTAL**
+- **Migración automática**: Configuraciones v1.3 se migran sin intervención
+- **Funcionalidad preservada**: Todas las características de v1.3 disponibles
+- **Coexistencia**: v1.3 (`dota_main_config.py`) y v2.0 (`main.py`) pueden usarse
+- **Datos conservados**: Cuentas ignoradas, selecciones y preferencias se mantienen
+
+### 📚 **DOCUMENTACIÓN TÉCNICA**
+- **ARQUITECTURA_MODULAR.md**: Documentación completa de la nueva arquitectura
+- **MIGRACION_V2.md**: Guía detallada de migración para desarrolladores
+- **requirements.txt**: Gestión de dependencias centralizada
+- **main.py**: Punto de entrada principal con validaciones
+
+### 🚀 **MEJORAS DE RENDIMIENTO**
+- **Carga lazy**: Avatares y recursos se cargan bajo demanda
+- **Caché inteligente**: Gestión eficiente de memoria
+- **Navegación optimizada**: Renderizado eficiente de páginas
+- **Limpieza automática**: Gestión de recursos y backups
+
+### 🔧 **EXTENSIBILIDAD**
+- **Sistema de plugins preparado**: Base para funcionalidades modulares
+- **Interfaces bien definidas**: Fácil agregar nuevos servicios
+- **Componentes reutilizables**: Widgets aplicables a otros contextos
+- **Configuración flexible**: Settings centralizados y expandibles
+
+---
+
 ## [v1.3] - 2025-07-29
 
 ### ✨ Agregado
