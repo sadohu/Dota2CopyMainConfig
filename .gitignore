@@ -18,6 +18,11 @@ logs/
 app.log
 dota_config.log
 
+# Archivos temporales de debug y test
+debug_*.py
+test_*.py
+*_test.py
+
 # Cache de la aplicación
 cache/
 __pycache__/
