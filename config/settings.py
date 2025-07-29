@@ -14,7 +14,7 @@ from typing import Dict, Any
 # ═══════════════════════════════════════════════════════════════════════════
 
 APP_NAME = "Dota 2 Config Copier"
-APP_VERSION = "2.1.1"
+APP_VERSION = "2.1.2"
 VERSION = APP_VERSION  # Alias para compatibilidad
 APP_AUTHOR = "Sadohu"
 APP_DESCRIPTION = "Aplicación para copiar configuraciones de Dota 2 entre cuentas de Steam"
@@ -107,6 +107,7 @@ DOTA2_APP_ID = "570"
 # Patrones de archivos a copiar
 CONFIG_PATTERNS = [
     "*.cfg",
+    "*.vcfg",  # Valve Configuration Files (configuraciones principales de Dota 2)
     "*.vdf",
     "*.dat",
     "*.txt"

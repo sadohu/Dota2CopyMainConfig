@@ -266,7 +266,7 @@ class FileCopyService:
     
     def _copy_folder_recursive(self, origen: Path, destino: Path) -> bool:
         """
-        Copia una carpeta de forma recursiva.
+        Copia una carpeta de forma recursiva (método simplificado v2.1.2).
         
         Args:
             origen: Carpeta origen
@@ -276,52 +276,24 @@ class FileCopyService:
             True si la copia fue exitosa
         """
         try:
-            # Asegurar que el destino existe
+            # Asegurar que el directorio padre del destino existe
             destino.parent.mkdir(parents=True, exist_ok=True)
             
-            # Copiar archivos y carpetas
-            for root, dirs, files in os.walk(origen):
-                # Calcular ruta relativa
-                rel_path = Path(root).relative_to(origen)
-                target_path = destino / rel_path
-                
-                # Filtrar carpetas excluidas
-                dirs[:] = [d for d in dirs if d not in EXCLUDE_FOLDERS]
-                
-                # Crear directorio destino
-                target_path.mkdir(parents=True, exist_ok=True)
-                
-                # Copiar archivos
-                for file in files:
-                    if self._should_copy_file(file):
-                        src_file = Path(root) / file
-                        dst_file = target_path / file
-                        
-                        shutil.copy2(src_file, dst_file)
-                        logger.debug(f"Copiado: {src_file} -> {dst_file}")
+            # Eliminar destino si existe para hacer una copia limpia
+            if destino.exists():
+                import shutil
+                shutil.rmtree(destino)
             
+            # Copiar toda la carpeta recursivamente (como en v1)
+            import shutil
+            shutil.copytree(origen, destino)
+            
+            logger.info(f"Carpeta copiada completamente: {origen} -> {destino}")
             return True
             
         except (OSError, shutil.Error, PermissionError) as e:
             logger.error(f"Error copiando carpeta {origen} -> {destino}: {e}")
             return False
-    
-    def _should_copy_file(self, filename: str) -> bool:
-        """
-        Determina si un archivo debe ser copiado.
-        
-        Args:
-            filename: Nombre del archivo
-            
-        Returns:
-            True si el archivo debe copiarse
-        """
-        # Verificar patrones de archivos de configuración
-        for pattern in CONFIG_PATTERNS:
-            if filename.lower().endswith(pattern.replace('*', '')):
-                return True
-        
-        return False
     
     def validate_paths(self, origen: Path, destino: Path) -> Tuple[bool, str]:
         """
@@ -365,18 +337,15 @@ class FileCopyService:
         total_size = 0
         
         try:
+            # Calcular tamaño de toda la carpeta (simplificado)
             for root, dirs, files in os.walk(origen):
-                # Filtrar carpetas excluidas
-                dirs[:] = [d for d in dirs if d not in EXCLUDE_FOLDERS]
-                
                 for file in files:
-                    if self._should_copy_file(file):
-                        file_path = Path(root) / file
-                        try:
-                            total_size += file_path.stat().st_size
-                        except (OSError, FileNotFoundError):
-                            continue
-                            
+                    file_path = Path(root) / file
+                    try:
+                        total_size += file_path.stat().st_size
+                    except (OSError, FileNotFoundError):
+                        continue
+                        
         except (OSError, PermissionError):
             logger.warning(f"No se pudo calcular el tamaño de {origen}")
         
