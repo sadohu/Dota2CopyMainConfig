@@ -141,15 +141,23 @@ def verificar_clases_principales() -> Tuple[bool, List[str]]:
 def ejecutar_tests() -> Tuple[bool, str]:
     """Ejecuta los tests automatizados"""
     try:
-        result = subprocess.run(
+        # Ejecutar tests principales
+        result_main = subprocess.run(
             [sys.executable, '-m', 'tests.test_refactor'],
             capture_output=True,
             text=True,
             timeout=30
         )
         
-        success = result.returncode == 0
-        output = result.stdout + result.stderr
+        # Solo verificar que los tests principales pasen
+        # Los tests de Steam son adicionales y opcionales
+        success = result_main.returncode == 0
+        
+        if success:
+            test_count = result_main.stderr.count("ok")
+            output = f"Tests principales pasaron correctamente ({test_count} tests)"
+        else:
+            output = f"Tests principales fallaron: {result_main.stderr[:200]}..."
         
         return success, output
     except subprocess.TimeoutExpired:

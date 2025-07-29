@@ -24,10 +24,91 @@ class SteamAccountService:
     y extracción de información de usuario.
     """
     
-    def __init__(self):
-        self.steam_userdata_path = STEAM_USERDATA_PATH
+    def __init__(self, custom_steam_path: str = ""):
+        self.custom_steam_path = custom_steam_path
+        self.steam_userdata_path = self._get_steam_userdata_path()
         self.avatar_cache_path = AVATAR_CACHE_PATH
         self.dota2_app_id = DOTA2_APP_ID
+    
+    def _get_steam_userdata_path(self) -> str:
+        """
+        Obtiene la ruta de userdata de Steam, usando ruta personalizada si está configurada.
+        
+        Returns:
+            Ruta del directorio userdata de Steam
+        """
+        if self.custom_steam_path and os.path.exists(self.custom_steam_path):
+            return os.path.join(self.custom_steam_path, "userdata")
+        return STEAM_USERDATA_PATH
+    
+    def set_custom_steam_path(self, steam_path: str) -> bool:
+        """
+        Configura una ruta personalizada de Steam.
+        
+        Args:
+            steam_path: Ruta del directorio de Steam
+            
+        Returns:
+            True si la ruta es válida
+        """
+        if self._validate_steam_path(steam_path):
+            self.custom_steam_path = steam_path
+            self.steam_userdata_path = os.path.join(steam_path, "userdata")
+            logger.info(f"Ruta de Steam configurada: {steam_path}")
+            return True
+        return False
+    
+    def _validate_steam_path(self, steam_path: str) -> bool:
+        """
+        Valida si una ruta contiene una instalación válida de Steam.
+        
+        Args:
+            steam_path: Ruta a validar
+            
+        Returns:
+            True si es una instalación válida de Steam
+        """
+        if not steam_path or not os.path.exists(steam_path):
+            return False
+            
+        # Verificar archivos/directorios críticos de Steam
+        steam_exe = os.path.join(steam_path, "steam.exe")
+        userdata_dir = os.path.join(steam_path, "userdata")
+        steamapps_dir = os.path.join(steam_path, "steamapps")
+        
+        return (os.path.exists(steam_exe) or os.path.exists(userdata_dir)) and \
+               os.path.exists(steamapps_dir)
+    
+    def get_default_steam_paths(self) -> List[str]:
+        """
+        Obtiene una lista de rutas típicas donde puede estar instalado Steam.
+        
+        Returns:
+            Lista de rutas potenciales de Steam
+        """
+        potential_paths = [
+            r"C:\Program Files (x86)\Steam",
+            r"C:\Program Files\Steam",
+            r"D:\Steam",
+            r"E:\Steam",
+            r"F:\Steam",
+            # Steam desde Microsoft Store
+            os.path.expanduser(r"~\AppData\Local\Packages\ValveCorporation.Steam_*"),
+        ]
+        
+        valid_paths = []
+        for path in potential_paths:
+            if "*" in path:
+                # Manejar wildcards para Steam de Microsoft Store
+                import glob
+                for expanded_path in glob.glob(path):
+                    steam_path = os.path.join(expanded_path, "LocalCache", "Local", "Steam")
+                    if self._validate_steam_path(steam_path):
+                        valid_paths.append(steam_path)
+            elif self._validate_steam_path(path):
+                valid_paths.append(path)
+        
+        return valid_paths
     
     def find_accounts_with_dota2(self) -> List[SteamAccount]:
         """

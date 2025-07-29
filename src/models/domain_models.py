@@ -249,6 +249,7 @@ class AppConfig:
     window_geometry: str = "1000x700"
     auto_backup: bool = True
     show_confirmations: bool = True
+    custom_steam_path: str = ""  # Ruta personalizada de Steam
     
     @classmethod
     def load_from_file(cls, file_path: Path) -> 'AppConfig':

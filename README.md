@@ -1,8 +1,29 @@
-# 🎮 Dota 2 Config Copier
+# 🎮![Version](https://img.shields.io/badge/version-v2.1.0-blue)
+![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
+![Language](https://img.shields.io/badge/language-Python-green)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+![Architecture](https://img.shields.io/badge/architecture-modular-brightgreen)
+
+## 🚀 ¡Nuevo en v2.1! - Configuración Avanzada de Steam + Layout Mejorado
+
+La versión 2.1 incluye **configuración avanzada de Steam** y **mejoras significativas en el layout** de la interfaz:
+
+### 🔧 **Configuración Avanzada de Steam**
+- **Detección automática mejorada**: Busca Steam en múltiples ubicaciones
+- **Configuración manual**: Permite seleccionar ubicación personalizada cuando no se detecta
+- **Menú de configuración**: Nueva barra de menú con opciones avanzadas
+- **Persistencia**: Las rutas personalizadas se guardan automáticamente
+
+### 🖥️ **Layout Mejorado y Responsive**
+- **Área fija para controles**: Estado y botones siempre visibles independientemente del número de cuentas
+- **Scrollbar inteligente**: Lista de cuentas con scroll cuando hay muchas cuentas
+- **Layout responsive**: Se adapta automáticamente al tamaño de la ventana
+- **Controles de paginación fijos**: Siempre accesibles en la parte superior
+- **Separación visual clara**: Mejor organización de elementos en la interfaz 2 Config Copier
 
 Una aplicación de escritorio para copiar configuraciones de Dota 2 entre cuentas de Steam de manera sencilla y eficiente.
 
-![Version](https://img.shields.io/badge/version-v2.0.0-blue)
+![Version](https://img.shields.io/badge/version-v2.1.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![Language](https://img.shields.io/badge/language-Python-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -43,6 +64,8 @@ La versión 2.0 presenta una **refactorización completa** con arquitectura modu
 - **Iconos descriptivos**: Facilitan la identificación de funciones
 - **Paginación inteligente**: Maneja eficientemente listas grandes de cuentas
 - **Selección visual**: Colores distintivos para origen y destino
+- **Layout responsive**: Todos los controles siempre visibles y accesibles
+- **Scrollbar automática**: Lista de cuentas se desplaza automáticamente cuando es necesario
 
 ### 📄 **Paginación Avanzada**
 - Control personalizable de elementos por página (10, 15, 20, 25, 30)

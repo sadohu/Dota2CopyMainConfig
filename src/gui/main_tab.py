@@ -262,6 +262,12 @@ class AccountListWidget(LoggingMixin):
     
     def _create_widgets(self) -> None:
         """Crea todos los widgets del componente."""
+        # Configurar grid del parent
+        self.parent.grid_rowconfigure(0, weight=0)  # Título fijo
+        self.parent.grid_rowconfigure(1, weight=0)  # Controles paginación fijo
+        self.parent.grid_rowconfigure(2, weight=1)  # Lista de cuentas expansible
+        self.parent.grid_columnconfigure(0, weight=1)
+        
         # Título
         title_text = IconHelper.text_with_icon("cuentas", self.title)
         self.title_label = tk.Label(
@@ -269,16 +275,70 @@ class AccountListWidget(LoggingMixin):
             text=title_text, 
             font=("Arial", 12, "bold")
         )
-        self.title_label.pack(pady=10)
+        self.title_label.grid(row=0, column=0, pady=10, sticky='ew')
+        
+        # Frame para controles de paginación (parte superior)
+        pagination_frame = ttk.Frame(self.parent)
+        pagination_frame.grid(row=1, column=0, sticky='ew', pady=(0, 5))
         
         # Controles de paginación
-        self.pagination_controls = PaginationControlWidget(self.parent, self.pagination)
+        self.pagination_controls = PaginationControlWidget(pagination_frame, self.pagination)
         self.pagination_controls.on_items_per_page_changed = self._on_items_per_page_changed
         self.pagination_controls.on_page_changed = self._on_page_changed
         
-        # Frame scrollable para cuentas
-        self.accounts_frame = ttk.Frame(self.parent)
-        self.accounts_frame.pack(fill='both', expand=True, padx=5)
+        # Frame con scrollbar para la lista de cuentas
+        self._create_scrollable_accounts_frame()
+    
+    def _create_scrollable_accounts_frame(self) -> None:
+        """Crea un frame scrollable para la lista de cuentas."""
+        # Frame contenedor principal para la lista
+        container_frame = ttk.Frame(self.parent)
+        container_frame.grid(row=2, column=0, sticky='nsew', padx=5)
+        container_frame.grid_rowconfigure(0, weight=1)
+        container_frame.grid_columnconfigure(0, weight=1)
+        
+        # Canvas para el contenido scrollable
+        self.canvas = tk.Canvas(container_frame, highlightthickness=0)
+        self.canvas.grid(row=0, column=0, sticky='nsew')
+        
+        # Scrollbar vertical
+        v_scrollbar = ttk.Scrollbar(container_frame, orient='vertical', command=self.canvas.yview)
+        v_scrollbar.grid(row=0, column=1, sticky='ns')
+        self.canvas.configure(yscrollcommand=v_scrollbar.set)
+        
+        # Frame interno para las cuentas
+        self.accounts_frame = ttk.Frame(self.canvas)
+        self.canvas_window = self.canvas.create_window((0, 0), window=self.accounts_frame, anchor='nw')
+        
+        # Configurar scroll con rueda del mouse
+        self._bind_mousewheel()
+        
+        # Configurar resize del canvas
+        self.accounts_frame.bind('<Configure>', self._on_frame_configure)
+        self.canvas.bind('<Configure>', self._on_canvas_configure)
+    
+    def _bind_mousewheel(self) -> None:
+        """Configura el scroll con la rueda del mouse."""
+        def _on_mousewheel(event):
+            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        def _bind_to_mousewheel(event):
+            self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        
+        def _unbind_from_mousewheel(event):
+            self.canvas.unbind_all("<MouseWheel>")
+        
+        self.canvas.bind('<Enter>', _bind_to_mousewheel)
+        self.canvas.bind('<Leave>', _unbind_from_mousewheel)
+    
+    def _on_frame_configure(self, event=None) -> None:
+        """Actualiza el scroll region cuando cambia el frame."""
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+    
+    def _on_canvas_configure(self, event=None) -> None:
+        """Actualiza el ancho del frame interno cuando cambia el canvas."""
+        canvas_width = self.canvas.winfo_width()
+        self.canvas.itemconfig(self.canvas_window, width=canvas_width)
     
     def set_accounts(self, accounts: List[SteamAccount]) -> None:
         """
@@ -432,13 +492,24 @@ class StatusWidget(LoggingMixin):
     
     def _create_widgets(self) -> None:
         """Crea los widgets del estado."""
+        # Frame contenedor para el estado
+        self.status_frame = ttk.Frame(self.parent)
+        
+        # Separador visual
+        separator = ttk.Separator(self.status_frame, orient='horizontal')
+        separator.pack(fill='x', pady=(0, 5))
+        
         self.status_label = tk.Label(
-            self.parent,
+            self.status_frame,
             text="Selecciona origen y destino",
-            font=("Arial", 10),
+            font=("Arial", 11, "bold"),
             fg="blue"
         )
-        self.status_label.pack(pady=10)
+        self.status_label.pack(pady=5)
+    
+    def position_fixed(self, row: int, column: int) -> None:
+        """Posiciona el widget en una posición fija usando grid."""
+        self.status_frame.grid(row=row, column=column, sticky='ew', pady=5)
     
     def update_status(self, selection: AppSelection) -> None:
         """
@@ -489,15 +560,19 @@ class ActionButtonsWidget(LoggingMixin):
     
     def _create_widgets(self) -> None:
         """Crea los botones de acción."""
-        buttons_frame = ttk.Frame(self.parent)
-        buttons_frame.pack(pady=5)
+        # Frame contenedor para los botones
+        self.buttons_container = ttk.Frame(self.parent)
+        
+        # Frame para centrar los botones
+        buttons_frame = ttk.Frame(self.buttons_container)
+        buttons_frame.pack(pady=10)
         
         # Botón cancelar
         self.btn_cancelar = IconHelper.create_icon_button(
             buttons_frame, "cancelar", "Cancelar selección",
             self._on_cancel_clicked
         )
-        self.btn_cancelar.pack(side='left', padx=5)
+        self.btn_cancelar.pack(side='left', padx=10)
         
         # Botón copiar
         self.btn_copiar = IconHelper.create_icon_button(
@@ -505,7 +580,11 @@ class ActionButtonsWidget(LoggingMixin):
             self._on_copy_clicked,
             state='disabled'
         )
-        self.btn_copiar.pack(side='left', padx=5)
+        self.btn_copiar.pack(side='left', padx=10)
+    
+    def position_fixed(self, row: int, column: int) -> None:
+        """Posiciona el widget en una posición fija usando grid."""
+        self.buttons_container.grid(row=row, column=column, sticky='ew', pady=5)
     
     def update_selection(self, selection: AppSelection) -> None:
         """

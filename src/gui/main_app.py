@@ -15,11 +15,12 @@ from .main_tab import AccountListWidget, StatusWidget, ActionButtonsWidget
 from .ignored_tab import IgnoredTabController
 from ..core.steam_service import SteamAccountService, AccountFilterService, ValidationService
 from ..core.config_service import ConfigurationService, FileCopyService
+from ..core.steam_config_service import SteamConfigurationService
 from ..models.domain_models import SteamAccount, AppSelection, CopyOperation, AppConfig
 from ..utils.ui_utils import MessageHelper, IconHelper
 from ..utils.logging_utils import LoggingMixin, OperationContext
 from config.settings import (
-    APP_NAME, APP_VERSION, APP_AUTHOR, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT,
+    APP_NAME, APP_VERSION, APP_AUTHOR, APP_DESCRIPTION, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT,
     WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT, ICON_PATH, MESSAGES
 )
 
@@ -63,10 +64,28 @@ class Dota2ConfigCopierApp(LoggingMixin):
     
     def _init_services(self) -> None:
         """Inicializa todos los servicios de la aplicación."""
-        self.steam_service = SteamAccountService()
+        # Cargar configuración primero
+        self.config_service = ConfigurationService()
+        self.app_config = self.config_service.load_config()
+        
+        # Inicializar servicio de configuración de Steam
+        self.steam_config_service = SteamConfigurationService(self.app_config)
+        
+        # Verificar instalación de Steam
+        if not self.steam_config_service.detect_steam_installation():
+            # Si no se detecta Steam, solicitar ubicación
+            if not self.steam_config_service.prompt_steam_location(self.root):
+                # Si el usuario cancela, mostrar advertencia pero continuar
+                MessageHelper.show_warning(
+                    "Steam no configurado",
+                    "La aplicación funcionará con limitaciones.\\n"
+                    "Puede configurar Steam más tarde desde el menú Configuración."
+                )
+        
+        # Inicializar otros servicios
+        self.steam_service = SteamAccountService(self.app_config.custom_steam_path)
         self.filter_service = AccountFilterService()
         self.validation_service = ValidationService()
-        self.config_service = ConfigurationService()
         self.file_service = FileCopyService(enable_backup=True)
         
         self.logger.info("Servicios inicializados correctamente")
@@ -94,19 +113,56 @@ class Dota2ConfigCopierApp(LoggingMixin):
         
         self.logger.info(f"Aplicación configurada: {title}")
     
+    def _create_menu(self) -> None:
+        """Crea la barra de menú de la aplicación."""
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+        
+        # Menú Archivo
+        file_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Archivo", menu=file_menu)
+        file_menu.add_command(label="Recargar cuentas", command=self._reload_accounts)
+        file_menu.add_separator()
+        file_menu.add_command(label="Salir", command=self._on_closing)
+        
+        # Menú Configuración
+        config_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Configuración", menu=config_menu)
+        config_menu.add_command(label="Configurar Steam...", command=self._configure_steam)
+        config_menu.add_separator()
+        config_menu.add_command(label="Detectar Steam automáticamente", command=self._auto_detect_steam)
+        
+        # Menú Ayuda
+        help_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Ayuda", menu=help_menu)
+        help_menu.add_command(label="Acerca de...", command=self._show_about)
+    
     def _create_interface(self) -> None:
         """Crea la interfaz de usuario completa."""
         with OperationContext("create_interface", self.logger):
-            # Crear notebook para pestañas
-            self.notebook = ttk.Notebook(self.root)
-            self.notebook.pack(fill='both', expand=True, padx=10, pady=10)
+            # Crear menú
+            self._create_menu()
+            
+            # Frame principal que contendrá todo
+            main_container = ttk.Frame(self.root)
+            main_container.pack(fill='both', expand=True, padx=10, pady=10)
+            
+            # Configurar grid del container principal para reservar espacio
+            main_container.grid_rowconfigure(0, weight=1)  # Notebook expansible
+            main_container.grid_rowconfigure(1, weight=0)  # Status fijo
+            main_container.grid_rowconfigure(2, weight=0)  # Botones fijo
+            main_container.grid_columnconfigure(0, weight=1)
+            
+            # Crear notebook para pestañas (se expande pero respeta espacio reservado)
+            self.notebook = ttk.Notebook(main_container)
+            self.notebook.grid(row=0, column=0, sticky='nsew', pady=(0, 5))
             
             # Crear pestañas
             self._create_main_tab()
             self._create_ignored_tab()
             
-            # Crear widgets de estado y acciones
-            self._create_status_widgets()
+            # Crear widgets de estado y acciones en posiciones fijas
+            self._create_status_widgets(main_container)
     
     def _create_main_tab(self) -> None:
         """Crea la pestaña principal de cuentas disponibles."""
@@ -134,13 +190,15 @@ class Dota2ConfigCopierApp(LoggingMixin):
         self.ignored_tab_controller = IgnoredTabController(ignored_frame)
         self.ignored_tab_controller.on_account_restored = self._on_account_restored
     
-    def _create_status_widgets(self) -> None:
-        """Crea los widgets de estado y botones de acción."""
-        # Widget de estado
-        self.status_widget = StatusWidget(self.root)
+    def _create_status_widgets(self, parent: tk.Widget) -> None:
+        """Crea los widgets de estado y botones de acción en posiciones fijas."""
+        # Widget de estado - posición fija en row=1
+        self.status_widget = StatusWidget(parent)
+        self.status_widget.position_fixed(row=1, column=0)
         
-        # Botones de acción
-        self.action_buttons = ActionButtonsWidget(self.root)
+        # Botones de acción - posición fija en row=2
+        self.action_buttons = ActionButtonsWidget(parent)
+        self.action_buttons.position_fixed(row=2, column=0)
         self.action_buttons.on_copy_clicked = self._on_copy_configuration
         self.action_buttons.on_cancel_clicked = self._on_cancel_selection
     
@@ -169,20 +227,18 @@ class Dota2ConfigCopierApp(LoggingMixin):
     
     def _load_saved_configuration(self) -> None:
         """Carga la configuración guardada previamente."""
-        config = self.config_service.config
-        
         # Configurar paginación en widgets
         if self.main_tab_widget:
-            self.main_tab_widget.pagination.items_per_page = config.items_por_pagina
+            self.main_tab_widget.pagination.items_per_page = self.app_config.items_por_pagina
         
         if self.ignored_tab_controller:
-            self.ignored_tab_controller.set_items_per_page(config.items_por_pagina)
+            self.ignored_tab_controller.set_items_per_page(self.app_config.items_por_pagina)
         
         self.logger.info("Configuración cargada correctamente")
     
     def _refresh_account_lists(self) -> None:
         """Actualiza las listas de cuentas disponibles e ignoradas."""
-        ignored_ids = self.config_service.get_ignored_accounts()
+        ignored_ids = self.app_config.cuentas_ignoradas
         
         # Filtrar cuentas
         self.available_accounts = self.filter_service.filter_available_accounts(
@@ -372,6 +428,72 @@ class Dota2ConfigCopierApp(LoggingMixin):
         self._on_selection_changed(self.current_selection)
         
         self.log_method_call("cancel_selection")
+    
+    def _reload_accounts(self) -> None:
+        """Recarga las cuentas de Steam."""
+        with OperationContext("reload_accounts", self.logger):
+            # Reinicializar servicio de Steam
+            self.steam_service = SteamAccountService(self.app_config.custom_steam_path)
+            
+            # Recargar datos
+            self._load_initial_data()
+            
+            MessageHelper.show_info("Cuentas recargadas", "Las cuentas de Steam han sido recargadas correctamente.")
+    
+    def _configure_steam(self) -> None:
+        """Abre el diálogo de configuración de Steam."""
+        result = self.steam_config_service.show_steam_configuration_dialog(self.root)
+        if result:
+            # Guardar configuración
+            self.config_service.save_config(self.app_config)
+            
+            # Recargar cuentas con nueva configuración
+            self._reload_accounts()
+    
+    def _auto_detect_steam(self) -> None:
+        """Intenta detectar Steam automáticamente."""
+        # Limpiar ruta personalizada para forzar detección automática
+        old_path = self.app_config.custom_steam_path
+        self.app_config.custom_steam_path = ""
+        
+        if self.steam_config_service.detect_steam_installation():
+            # Guardar configuración actualizada
+            self.config_service.save_config(self.app_config)
+            
+            # Recargar cuentas
+            self._reload_accounts()
+            
+            MessageHelper.show_info(
+                "Steam detectado",
+                "Steam ha sido detectado automáticamente y las cuentas han sido recargadas."
+            )
+        else:
+            # Restaurar ruta anterior si falla
+            self.app_config.custom_steam_path = old_path
+            
+            MessageHelper.show_warning(
+                "Steam no detectado",
+                "No se pudo detectar Steam automáticamente.\\n"
+                "Use 'Configurar Steam...' para seleccionar la ubicación manualmente."
+            )
+    
+    def _show_about(self) -> None:
+        """Muestra información sobre la aplicación."""
+        about_text = f"""{APP_NAME} v{APP_VERSION}
+Desarrollado por {APP_AUTHOR}
+
+{APP_DESCRIPTION}
+
+Arquitectura Modular v2.0
+- Separación de responsabilidades
+- Principios SOLID aplicados
+- Testing automatizado
+- Logging avanzado
+
+Steam configurado en: {self.app_config.custom_steam_path or 'Detección automática'}
+"""
+        
+        MessageHelper.show_info("Acerca de", about_text)
     
     def _on_closing(self) -> None:
         """Maneja el cierre de la aplicación."""

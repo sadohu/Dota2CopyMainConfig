@@ -5,6 +5,53 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [v2.1.0] - 2025-07-29 🔧 CONFIGURACIÓN AVANZADA DE STEAM
+
+### ✨ **NUEVAS FUNCIONALIDADES**
+- **Detección automática mejorada de Steam**: Busca en múltiples ubicaciones estándar
+- **Configuración manual de Steam**: Permite seleccionar ubicación personalizada cuando no se detecta automáticamente
+- **Menú de configuración**: Nueva barra de menú con opciones avanzadas
+- **Persistencia de configuración**: Las rutas personalizadas se guardan automáticamente
+- **Soporte para Steam Microsoft Store**: Detecta instalaciones desde Microsoft Store
+
+### 🔧 **MEJORAS DE CONFIGURACIÓN**
+- **Prompt automático**: Si Steam no se detecta, solicita ubicación al usuario
+- **Validación robusta**: Verifica que la ubicación contiene una instalación válida de Steam
+- **Múltiples rutas**: Soporte para Steam en ubicaciones no estándar
+- **Reconfiguración en tiempo real**: Cambiar ubicación de Steam sin reiniciar la aplicación
+
+### 🖥️ **INTERFAZ MEJORADA**
+- **Menú Archivo**: Recargar cuentas, salir
+- **Menú Configuración**: Configurar Steam, detección automática
+- **Menú Ayuda**: Información sobre la aplicación
+- **Diálogos informativos**: Mensajes claros sobre el estado de Steam
+
+### 🧪 **TESTING EXPANDIDO**
+- **10 nuevos tests**: Validación completa de configuración de Steam
+- **Tests de integración**: Flujo completo de detección y configuración
+- **Cobertura mejorada**: Validación de rutas, configuración personalizada, persistencia
+
+### 🏗️ **ARQUITECTURA EXTENDIDA**
+- **SteamConfigurationService**: Nuevo servicio para gestión de configuración de Steam
+- **SteamConfigDialog**: Diálogo modular para configuración avanzada
+- **Validación de rutas**: Métodos robustos para verificar instalaciones de Steam
+- **Configuración persistente**: AppConfig extendido con custom_steam_path
+
+### 🔄 **COMPATIBILIDAD PRESERVADA**
+- **Detección automática**: Funciona igual que v2.0 cuando Steam está en ubicación estándar
+- **Configuración existente**: Las configuraciones anteriores se mantienen
+- **Funcionalidad core**: Toda la funcionalidad de copia de configuraciones preservada
+
+### 📋 **CASOS DE USO SOPORTADOS**
+- ✅ Steam en `C:\\Program Files (x86)\\Steam` (estándar)
+- ✅ Steam en `C:\\Program Files\\Steam`
+- ✅ Steam en unidades alternativas (D:, E:, F:)
+- ✅ Steam desde Microsoft Store
+- ✅ Instalaciones portables de Steam
+- ✅ Configuración manual para cualquier ubicación
+
+---
+
 ## [v2.0.0] - 2025-07-29 🚀 REFACTORIZACIÓN COMPLETA - ARQUITECTURA MODULAR
 
 ### ✨ **NUEVA ARQUITECTURA MODULAR**
