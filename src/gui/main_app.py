@@ -248,12 +248,19 @@ class Dota2ConfigCopierApp(LoggingMixin):
             self.all_accounts, ignored_ids
         )
         
-        # Actualizar widgets
+        # Actualizar widgets y forzar redibujado
         if self.main_tab_widget:
             self.main_tab_widget.set_accounts(self.available_accounts)
+            # Forzar actualización visual
+            self.main_tab_widget.parent.update_idletasks()
         
         if self.ignored_tab_controller:
             self.ignored_tab_controller.set_ignored_accounts(self.ignored_accounts)
+            # Forzar actualización visual
+            self.ignored_tab_controller.accounts_list.parent.update_idletasks()
+        
+        # Actualizar la ventana completa
+        self.root.update_idletasks()
         
         self.logger.info(f"Listas actualizadas: {len(self.available_accounts)} disponibles, "
                         f"{len(self.ignored_accounts)} ignoradas")
@@ -334,17 +341,34 @@ class Dota2ConfigCopierApp(LoggingMixin):
         Args:
             account: Cuenta a ignorar
         """
-        # Confirmar con el usuario
+        # Verificar si la cuenta ya está ignorada
+        if self.app_config.is_ignored(account.steamid):
+            MessageHelper.show_info(
+                "Cuenta ya ignorada",
+                f"La cuenta '{account.nombre}' ya está en la lista de ignoradas.\\n\\n"
+                f"Puedes verla en la pestaña 'Cuentas Ignoradas'."
+            )
+            return
+        
+        # Confirmar con el usuario (asegurar que el diálogo aparezca al frente)
+        self.root.lift()  # Traer ventana al frente
+        self.root.attributes('-topmost', True)  # Temporal: al frente
+        
         confirm = MessageHelper.ask_confirmation(
             "Confirmar",
             MESSAGES["confirm_ignore"].format(account.nombre)
         )
+        
+        self.root.attributes('-topmost', False)  # Quitar topmost
         
         if not confirm:
             return
         
         # Ignorar cuenta
         self.config_service.ignore_account(account.steamid)
+        
+        # Actualizar referencia de configuración para sincronizar cambios
+        self.app_config = self.config_service.config
         
         # Limpiar selección si la cuenta ignorada estaba seleccionada
         if self.current_selection.has_account(account):
@@ -353,6 +377,13 @@ class Dota2ConfigCopierApp(LoggingMixin):
         
         # Actualizar listas
         self._refresh_account_lists()
+        
+        # Mostrar confirmación de éxito
+        MessageHelper.show_info(
+            "Cuenta ignorada",
+            f"La cuenta '{account.nombre}' ha sido ignorada exitosamente.\\n\\n"
+            f"Puedes restaurarla desde la pestaña 'Cuentas Ignoradas'."
+        )
         
         self.log_method_call("account_ignored", account=account.steamid)
     
@@ -366,8 +397,18 @@ class Dota2ConfigCopierApp(LoggingMixin):
         # Restaurar cuenta
         self.config_service.restore_account(account.steamid)
         
+        # Actualizar referencia de configuración para sincronizar cambios
+        self.app_config = self.config_service.config
+        
         # Actualizar listas
         self._refresh_account_lists()
+        
+        # Mostrar confirmación de éxito
+        MessageHelper.show_info(
+            "Cuenta restaurada",
+            f"La cuenta '{account.nombre}' ha sido restaurada exitosamente.\\n\\n"
+            f"Ahora aparece en la pestaña 'Cuentas Disponibles'."
+        )
         
         self.log_method_call("account_restored", account=account.steamid)
     
