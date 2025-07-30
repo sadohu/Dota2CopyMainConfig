@@ -54,7 +54,7 @@ backup_*/
 # PyInstaller builds
 build/
 dist/
-*.spec
+# *.spec - Comentado para permitir archivos de configuración de build
 
 # Archivos compilados
 *.exe

@@ -6,6 +6,7 @@ siguiendo el principio de separación de responsabilidades.
 """
 
 import os
+import sys
 from pathlib import Path
 from typing import Dict, Any
 
@@ -20,11 +21,43 @@ APP_AUTHOR = "Sadohu"
 APP_DESCRIPTION = "Twin your Dota experience - Copy configurations between Steam accounts"
 
 # ═══════════════════════════════════════════════════════════════════════════
-# RUTAS DEL SISTEMA
+# DETECCIÓN DE ENTORNO Y RUTAS DEL SISTEMA
 # ═══════════════════════════════════════════════════════════════════════════
 
+def _get_base_path():
+    """
+    Detecta si estamos en un ejecutable empaquetado o en desarrollo.
+    
+    Returns:
+        Path: Ruta base de la aplicación
+    """
+    if getattr(sys, 'frozen', False):
+        # Estamos en un ejecutable empaquetado con PyInstaller
+        return Path(sys.executable).parent
+    else:
+        # Estamos en desarrollo
+        return Path(__file__).parent.parent
+
+def _get_resource_path(relative_path: str) -> Path:
+    """
+    Obtiene la ruta correcta de un recurso, tanto en desarrollo como empaquetado.
+    
+    Args:
+        relative_path: Ruta relativa al recurso
+        
+    Returns:
+        Path: Ruta absoluta al recurso
+    """
+    if getattr(sys, 'frozen', False):
+        # En ejecutable empaquetado, los recursos están en el directorio temporal
+        base_path = Path(sys._MEIPASS)  # Directorio temporal de PyInstaller
+        return base_path / relative_path
+    else:
+        # En desarrollo, usar rutas normales del proyecto
+        return PROJECT_ROOT / "config" / "assets" / relative_path
+
 # Rutas base del proyecto
-PROJECT_ROOT = Path(__file__).parent.parent
+PROJECT_ROOT = _get_base_path()
 ASSETS_DIR = PROJECT_ROOT / "config" / "assets"
 CONFIG_DIR = PROJECT_ROOT / "config"
 DOCS_DIR = PROJECT_ROOT / "docs"
@@ -35,7 +68,7 @@ AVATAR_CACHE_PATH = Path(r"C:\Program Files (x86)\Steam\config\avatarcache")
 
 # Archivos de configuración
 CACHE_FILE = "ultima_seleccion.json"
-ICON_PATH = ASSETS_DIR / "dota2.ico"
+ICON_PATH = _get_resource_path("dota2.ico")  # Usar función de detección de rutas
 LOG_FILE = "app.log"
 
 # ═══════════════════════════════════════════════════════════════════════════

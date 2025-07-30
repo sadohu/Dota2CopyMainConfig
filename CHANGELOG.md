@@ -34,6 +34,16 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
     - Configuración tardía con `root.after()` para máxima compatibilidad
   - **Resultado**: DotaTwin ahora muestra su icono `dota2.ico` en ventana, diálogos y barra de tareas
 
+- **Ejecutable PyInstaller**: Corregido problema de icono en ejecutable empaquetado
+  - **Problema**: El icono funcionaba en desarrollo pero no en el .exe generado
+  - **Causa**: Rutas hardcodeadas que no funcionan cuando PyInstaller empaqueta la aplicación
+  - **Solución**: Implementada detección automática de entorno con `sys.frozen` y `sys._MEIPASS`
+  - **Mejoras técnicas**:
+    - Nueva función `_get_resource_path()` para resolver rutas dinámicamente
+    - Detección automática: desarrollo vs. ejecutable empaquetado
+    - Uso de `sys._MEIPASS` para acceder a recursos en ejecutables
+  - **Resultado**: Icono funciona perfectamente tanto en desarrollo como en ejecutable final
+
 ### 📁 **LIMPIEZA DE PROYECTO**
 - **Estructura organizada**: Archivos temporales eliminados, assets organizados en `config/assets/`
 - **Build config**: Archivos de PyInstaller movidos a `build_config/` 
