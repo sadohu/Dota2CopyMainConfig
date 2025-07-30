@@ -4,7 +4,35 @@
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 ![Architecture](https://img.shields.io/badge/architecture-modular-brightgreen)
 
-## 🚀 ¡Nuevo en v3.0! - Rebranding como DotaTwin
+## � Índice
+
+- [🚀 ¡Nuevo en v3.0! - Rebranding como DotaTwin](#-nuevo-en-v30---rebranding-como-dotatwin)
+- [✨ ¿Qué es DotaTwin?](#-qué-es-dotatwin)
+- [🎯 Características Principales](#-características-principales-de-v30)
+- [📋 Descripción](#-descripción)
+- [🔥 Características Destacadas](#-características-principales)
+- [🖥️ Interfaz de Usuario](#️-interfaz-de-usuario)
+- [🛠️ Requisitos del Sistema](#️-requisitos-del-sistema)
+- [📦 Instalación](#-instalación)
+  - [Opción 1: Ejecutable (Recomendado)](#opción-1-ejecutable-recomendado-para-usuarios)
+  - [Opción 2: Código Fuente](#opción-2-código-fuente-recomendado-para-desarrolladores)
+- [🚀 Uso](#-uso)
+  - [Pasos Básicos](#pasos-básicos)
+  - [Funciones Avanzadas](#funciones-avanzadas)
+- [📁 Estructura del Proyecto](#-estructura-de-archivos)
+- [⚙️ Configuración](#️-configuración)
+- [🔒 Seguridad](#-seguridad)
+- [🐛 Solución de Problemas](#-solución-de-problemas)
+- [🤝 Contribuciones](#-contribuciones)
+- [📄 Licencia](#-licencia)
+- [👨‍💻 Autor](#-autor)
+- [🙏 Agradecimientos](#-agradecimientos)
+- [📞 Contacto y Soporte](#-contacto-y-soporte)
+- [📈 Roadmap](#-roadmap)
+
+---
+
+## �🚀 ¡Nuevo en v3.0! - Rebranding como DotaTwin
 
 **DotaTwin** es la evolución de Dota 2 Config Copier con un nuevo nombre que refleja perfectamente su propósito: **crear gemelos perfectos de tus configuraciones de Dota**.
 
@@ -268,7 +296,33 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 ### 🤖 Desarrollo Asistido por IA
 Este proyecto utiliza **pair programming** con GitHub Copilot desde la v2.0, combinando experiencia humana con asistencia de IA para un desarrollo más eficiente y código de mayor calidad.
 
-## 📈 Roadmap
+## � Contacto y Soporte
+
+### 🎮 **Comunidad Discord**
+**¡Únete a nuestra comunidad oficial!**
+- 💬 **Discord**: [https://discord.gg/MYNyKQvk](https://discord.gg/MYNyKQvk)
+- 👥 Ayuda de la comunidad y soporte técnico
+- 🔄 Intercambio de configuraciones y tips
+- 📢 Anuncios de nuevas versiones
+
+### 🔗 **Desarrollo y Código**
+- 📂 **GitHub**: [https://github.com/sadohu/DotaTwin](https://github.com/sadohu/DotaTwin)
+- 🐛 **Issues**: Para reportar bugs y solicitar características
+- 📝 **Pull Requests**: Contribuciones bienvenidas
+- 📚 **Wiki**: Documentación adicional y FAQ
+
+### 💬 **Desarrollador**
+- 🎯 **Discord Personal**: `Sadohu`
+- 📧 **GitHub**: [@sadohu](https://github.com/sadohu)
+
+### 🆘 **Tipos de Soporte**
+- ✅ **Bugs y errores**: GitHub Issues
+- ✅ **Preguntas generales**: Discord community
+- ✅ **Solicitudes de características**: GitHub Issues
+- ✅ **Documentación**: Wiki del proyecto
+- ✅ **Contribuciones**: Pull Requests
+
+## �📈 Roadmap
 
 ### v2.1 (Próxima) - Mejoras Incrementales
 - [ ] Sistema de plugins para extensibilidad
@@ -293,12 +347,16 @@ Este proyecto utiliza **pair programming** con GitHub Copilot desde la v2.0, com
 - [ ] Soporte para múltiples plataformas (Linux, macOS)
 - [ ] Base de datos externa opcional
 
-## 📞 Soporte
-
-- **Issues**: GitHub Issues
-- **Documentación**: Carpeta `docs/`
-- **FAQ**: Wiki del proyecto
-
 ---
 
-*Dota 2 Config Copier - Simplificando la gestión de configuraciones de Dota 2*
+## 🎯 **DotaTwin v3.0.0** - *Twin your Dota experience*
+
+**Desarrollado con ❤️ por [Sadohu](https://github.com/sadohu)**
+
+🔗 **Enlaces importantes:**
+- 📂 [Repositorio en GitHub](https://github.com/sadohu/DotaTwin)
+- 💬 [Únete al Discord](https://discord.gg/MYNyKQvk)
+- 📋 [Reportar Issues](https://github.com/sadohu/DotaTwin/issues)
+- 📚 [Documentación](https://github.com/sadohu/DotaTwin/wiki)
+
+*Simplificando la gestión de configuraciones de Dota 2 desde 2025*
