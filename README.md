@@ -15,7 +15,8 @@
 - [🛠️ Requisitos del Sistema](#️-requisitos-del-sistema)
 - [📦 Instalación](#-instalación)
   - [Opción 1: Ejecutable (Recomendado)](#opción-1-ejecutable-recomendado-para-usuarios)
-  - [Opción 2: Código Fuente](#opción-2-código-fuente-recomendado-para-desarrolladores)
+  - [Opción 2: Portable (Sin alertas)](#opción-2-portable-sin-alertas-de-windows)
+  - [Opción 3: Código Fuente](#opción-3-código-fuente-recomendado-para-desarrolladores)
 - [�️ Alerta de Seguridad de Windows](#️-alerta-de-seguridad-de-windows)
 - [�🚀 Uso](#-uso)
   - [Pasos Básicos](#pasos-básicos)
@@ -142,7 +143,27 @@ La versión 2.0 presenta una **refactorización completa** con arquitectura modu
 2. **Colocar** en cualquier carpeta
 3. **Ejecutar** haciendo doble clic
 
-### Opción 2: Código Fuente (Recomendado para desarrolladores)
+> ⚠️ **Nota**: Puede aparecer una alerta de Windows SmartScreen (ver sección de [Alerta de Seguridad](#️-alerta-de-seguridad-de-windows))
+
+### Opción 2: Portable (Sin alertas de Windows)
+**🆕 ¡Nuevo en v3.1.0!** - Versión portable que evita las alertas de Windows SmartScreen
+
+1. **Descargar** el archivo `DotaTwin_v3.1.0_Portable.zip` desde [GitHub Releases](https://github.com/sadohu/DotaTwin/releases)
+2. **Extraer** en cualquier carpeta
+3. **Ejecutar** `run.bat` para iniciar
+
+**✅ Ventajas del portable**:
+- Sin alertas de Windows SmartScreen
+- No requiere instalación
+- Código fuente visible y auditable
+- Incluye Python embebido (~21 MB)
+- Portable entre sistemas Windows
+
+**📋 Requisitos**:
+- Windows 7 o superior
+- Para GUI completa: Python con tkinter (o usar Python del sistema)
+
+### Opción 3: Código Fuente (Recomendado para desarrolladores)
 
 ```bash
 # Clonar repositorio
@@ -198,6 +219,7 @@ Si aparece la alerta de Windows SmartScreen:
 
 ### 🤝 **Alternativas si prefieres mayor seguridad**
 
+- **🆕 Usar versión portable**: Descarga `DotaTwin_v3.1.0_Portable.zip` - **Sin alertas de Windows**
 - **Ejecutar desde código fuente**: Descargar el proyecto y ejecutar con `python main.py`
 - **Revisar el código**: Todo está disponible en GitHub para inspección
 - **Usar antivirus**: Escanear el archivo con tu antivirus preferido
@@ -381,7 +403,7 @@ Este proyecto utiliza **pair programming** con GitHub Copilot desde la v2.0, com
 ### v2.2 - Funcionalidades Avanzadas
 - [ ] Backup automático antes de copiar
 - [ ] Soporte para configuraciones específicas (solo hotkeys, solo video, etc.)
-- [ ] Modo portable (sin instalación)
+- [x] ~~Modo portable (sin instalación)~~ ✅ **Implementado en v3.1.0**
 - [ ] Perfiles de configuración múltiples
 
 ### v2.5 - Expansión Multi-Juego
