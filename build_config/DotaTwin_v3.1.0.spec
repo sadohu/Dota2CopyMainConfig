@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# PyInstaller spec file for DotaTwin v3.0.0
+# PyInstaller spec file for DotaTwin v3.1.0
 
 import os
 from pathlib import Path
@@ -69,4 +69,7 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     icon='../config/assets/dota2.ico',  # Icono del ejecutable (ruta corregida)
+    # version='version_info.py',  # Información de versión (comentado temporalmente)
+    uac_admin=False,  # No requiere permisos de administrador
+    uac_uiaccess=False,  # Sin acceso especial a UI
 )

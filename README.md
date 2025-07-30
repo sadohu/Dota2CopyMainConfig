@@ -1,4 +1,4 @@
-# 🎮 DotaTwin ![Version](https://img.shields.io/badge/version-v3.0.0-blue)
+# 🎮 DotaTwin ![Version](https://img.shields.io/badge/version-v3.1.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![Language](https://img.shields.io/badge/language-Python-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -16,7 +16,8 @@
 - [📦 Instalación](#-instalación)
   - [Opción 1: Ejecutable (Recomendado)](#opción-1-ejecutable-recomendado-para-usuarios)
   - [Opción 2: Código Fuente](#opción-2-código-fuente-recomendado-para-desarrolladores)
-- [🚀 Uso](#-uso)
+- [�️ Alerta de Seguridad de Windows](#️-alerta-de-seguridad-de-windows)
+- [�🚀 Uso](#-uso)
   - [Pasos Básicos](#pasos-básicos)
   - [Funciones Avanzadas](#funciones-avanzadas)
 - [📁 Estructura del Proyecto](#-estructura-de-archivos)
@@ -137,30 +138,77 @@ La versión 2.0 presenta una **refactorización completa** con arquitectura modu
 ## 📦 Instalación
 
 ### Opción 1: Ejecutable (Recomendado para usuarios)
-1. Descargar el archivo `dota_main_config.exe`
-2. Colocar en cualquier carpeta
-3. Ejecutar como administrador (recomendado)
+1. **Descargar** el archivo `DotaTwin_v3.1.0.exe` desde [GitHub Releases](https://github.com/sadohu/DotaTwin/releases)
+2. **Colocar** en cualquier carpeta
+3. **Ejecutar** haciendo doble clic
 
 ### Opción 2: Código Fuente (Recomendado para desarrolladores)
 
-#### Versión 2.0 - Arquitectura Modular
 ```bash
 # Clonar repositorio
-git clone [url-del-repo]
-cd dota2-config-copier
+git clone https://github.com/sadohu/DotaTwin.git
+cd DotaTwin
 
 # Instalar dependencias
 pip install -r requirements.txt
 
-# Ejecutar aplicación modular
+# Ejecutar aplicación
 python main.py
 ```
 
-#### Versión 1.3 - Legacy (Compatible)
-```bash
-# Ejecutar versión anterior
-python dota_main_config.py
+## 🛡️ Alerta de Seguridad de Windows
+
+**⚠️ IMPORTANTE**: Al descargar y ejecutar DotaTwin por primera vez, Windows puede mostrar una alerta de seguridad.
+
+### 🔍 **¿Por qué aparece esta alerta?**
+
+Windows SmartScreen puede mostrar mensajes como:
+- *"Windows protegió su PC"*
+- *"Aplicación no reconocida"*
+- *"El editor no pudo ser verificado"*
+
+**Esto es NORMAL** y ocurre porque:
+- DotaTwin es un ejecutable **no firmado digitalmente** (requiere certificado costoso ~$300/año)
+- Es una aplicación **nueva** sin suficiente "reputación" en Windows
+- Windows es **extremadamente cauteloso** con aplicaciones de desarrolladores independientes
+
+### ✅ **¿Es seguro DotaTwin?**
+
+**¡SÍ, absolutamente!** DotaTwin es **100% seguro**:
+- ✅ **Código abierto**: Todo el código fuente está disponible en GitHub
+- ✅ **Sin malware**: Solo copia archivos de configuración de Dota 2
+- ✅ **Sin acceso a red**: No se conecta a internet ni envía datos
+- ✅ **Sin modificaciones del sistema**: Solo lee/escribe archivos .vcfg de Steam
+- ✅ **Desarrollado responsablemente**: Código revisable y transparente
+
+### 🚀 **Cómo proceder con seguridad**
+
+Si aparece la alerta de Windows SmartScreen:
+
+1. **Hacer clic en "Más información"**
+2. **Hacer clic en "Ejecutar de todas formas"**
+3. **¡Listo!** DotaTwin se ejecutará normalmente
+
+**Captura de pantalla del proceso**:
 ```
+[Windows protegió su PC]
+[Más información] ← Hacer clic aquí
+[Ejecutar de todas formas] ← Después hacer clic aquí
+```
+
+### 🤝 **Alternativas si prefieres mayor seguridad**
+
+- **Ejecutar desde código fuente**: Descargar el proyecto y ejecutar con `python main.py`
+- **Revisar el código**: Todo está disponible en GitHub para inspección
+- **Usar antivirus**: Escanear el archivo con tu antivirus preferido
+
+### 📞 **¿Dudas sobre seguridad?**
+
+Si tienes preguntas adicionales:
+- 💬 **Discord**: [Únete a nuestra comunidad](https://discord.gg/MYNyKQvk)
+- 📧 **GitHub Issues**: [Reportar consultas](https://github.com/sadohu/DotaTwin/issues)
+
+---
 
 ## 🚀 Uso
 

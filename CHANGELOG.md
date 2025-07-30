@@ -5,6 +5,30 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [v3.1.0] - 2025-07-29 🚀 PREPARACIÓN PARA GITHUB RELEASES
+
+### 🌐 **DISTRIBUCIÓN Y SEGURIDAD**
+- **GitHub Releases**: Preparación completa para distribución oficial a través de GitHub
+- **Documentación de seguridad**: Sección completa en README sobre alertas de Windows SmartScreen
+- **Transparencia total**: Explicación detallada de por qué aparecen las alertas y cómo proceder
+- **Guías de usuario**: Instrucciones paso a paso para manejar alertas de seguridad
+
+### 🛡️ **ALERTA DE WINDOWS SMARTSCREEN**
+- **Explicación educativa**: Documentación sobre por qué Windows marca ejecutables no firmados
+- **Procedimiento seguro**: Pasos claros para ejecutar DotaTwin de manera segura
+- **Alternativas**: Opciones para usuarios que prefieren ejecutar desde código fuente
+- **Tranquilidad del usuario**: Garantías sobre la seguridad y transparencia del código
+
+### 📋 **OPTIMIZACIONES TÉCNICAS**
+- **Estructura de build mejorada**: Configuración optimizada para distribución
+- **Ejecutable limpio**: Sin requerimientos de administrador ni accesos especiales
+- **Metadatos del ejecutable**: Información detallada del archivo para reducir falsas alertas
+
+### 🔧 **MEJORAS DE DOCUMENTACIÓN**
+- **README expandido**: Sección completa sobre seguridad y procedimientos
+- **Enlaces actualizados**: URLs correctas a GitHub Releases y comunidad Discord
+- **Badges actualizados**: Versión v3.1.0 reflejada en toda la documentación
+
 ## [v3.0.0] - 2025-07-29 🎯 REBRANDING: DOTATWIN
 
 ### 🚀 **REBRANDING COMPLETO**
