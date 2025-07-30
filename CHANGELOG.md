@@ -19,7 +19,13 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 - **Todos los archivos**: Actualizadas las referencias en código, documentación y configuración
 - **Mantiene funcionalidad**: Sin cambios en características técnicas, solo rebranding
 
-### 📁 **LIMPIEZA DE PROYECTO**
+### � **MINOR FIXES**
+- **GUI Paginación**: Corregido problema donde los controles de paginación no se mostraban visualmente
+  - **Causa**: Inconsistencia en layout managers (mixing pack/grid) y falta de posicionamiento del frame
+  - **Solución**: Consistencia en grid layout y agregado `frame.pack()` en PaginationWidget
+  - **Resultado**: Controles de paginación ahora visibles cuando hay múltiples páginas
+
+### �📁 **LIMPIEZA DE PROYECTO**
 - **Estructura organizada**: Archivos temporales eliminados, assets organizados en `config/assets/`
 - **Build config**: Archivos de PyInstaller movidos a `build_config/` 
 - **Rutas actualizadas**: Spec files con rutas relativas correctas

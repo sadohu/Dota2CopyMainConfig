@@ -211,15 +211,20 @@ class PaginationControlWidget(LoggingMixin):
     
     def render(self) -> None:
         """Renderiza los controles."""
-        # Mostrar frame de controles
-        self.controls_frame.pack(fill='x', padx=5, pady=5)
+        # Configurar grid del parent para los frames
+        self.parent.grid_rowconfigure(0, weight=0)  # Controles fijo
+        self.parent.grid_rowconfigure(1, weight=0)  # Navegación fijo
+        self.parent.grid_columnconfigure(0, weight=1)
+        
+        # Mostrar frame de controles usando grid
+        self.controls_frame.grid(row=0, column=0, sticky='ew', padx=5, pady=5)
         
         # Renderizar navegación solo si hay múltiples páginas
         if self.pagination.total_pages > 1:
-            self.navigation_frame.pack(fill='x', padx=5, pady=5)
+            self.navigation_frame.grid(row=1, column=0, sticky='ew', padx=5, pady=5)
             self.pagination_widget.render()
         else:
-            self.navigation_frame.pack_forget()
+            self.navigation_frame.grid_remove()
 
 
 class AccountListWidget(LoggingMixin):

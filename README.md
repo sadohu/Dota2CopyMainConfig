@@ -19,12 +19,7 @@ Una aplicación de escritorio que permite **duplicar configuraciones de Dota 2**
 - **Configuración avanzada de Steam**: Detección automática y configuración manual
 - **Layout responsive**: Se adapta perfectamente a cualquier tamaño de ventana
 - **Sistema de copia completa**: Garantiza que todos los archivos .vcfg se copien correctamente
-
-![Version](https://img.shields.io/badge/version-v2.1.0-blue)
-![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
-![Language](https://img.shields.io/badge/language-Python-green)
-![License](https://img.shields.io/badge/license-MIT-yellow)
-![Architecture](https://img.shields.io/badge/architecture-modular-brightgreen)
+- **Desarrollo asistido por IA**: Evolucionado desde v2.0 usando pair programming con GitHub Copilot
 
 ## 🚀 ¡Nuevo en v2.0! - Arquitectura Modular
 
@@ -264,9 +259,14 @@ Este proyecto está bajo la Licencia MIT. Ver `LICENSE` para más detalles.
 
 ## 🙏 Agradecimientos
 
+- **[EpziTecho](https://github.com/EpziTecho)** por sugerir el nombre "DotaTwin" que captura perfectamente la esencia del proyecto
+- **GitHub Copilot** por el apoyo continuo en la generación de código desde la v2.0 usando *pair programming* asistido por IA
 - Comunidad de Dota 2 por feedback y testing
 - Valve por la estructura abierta de configuraciones
 - Usuarios beta por reportes de bugs y sugerencias
+
+### 🤖 Desarrollo Asistido por IA
+Este proyecto utiliza **pair programming** con GitHub Copilot desde la v2.0, combinando experiencia humana con asistencia de IA para un desarrollo más eficiente y código de mayor calidad.
 
 ## 📈 Roadmap
 

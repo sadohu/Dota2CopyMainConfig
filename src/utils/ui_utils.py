@@ -214,6 +214,9 @@ class PaginationWidget:
         if self.pagination.total_pages <= 1:
             return self.frame
         
+        # Configurar el frame principal
+        self.frame.pack(fill='x', expand=True)
+        
         # Botón anterior
         if self.pagination.has_previous:
             btn_prev = IconHelper.create_icon_button(
