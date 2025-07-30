@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Punto de entrada principal para Dota 2 Config Copier v2.0.
+Punto de entrada principal para DotaTwin v3.0.
 
 Este archivo actúa como el launcher principal de la aplicación,
 configurando el entorno y iniciando la interfaz gráfica.

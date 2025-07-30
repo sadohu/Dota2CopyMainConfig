@@ -5,6 +5,26 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
 
+## [v3.0.0] - 2025-07-29 🎯 REBRANDING: DOTATWIN
+
+### 🚀 **REBRANDING COMPLETO**
+- **Nuevo nombre**: "Dota 2 Config Copier" → **"DotaTwin"**
+- **Nueva identidad**: "Twin your Dota experience" - Crear gemelos perfectos de configuraciones
+- **Versión mayor**: Incremento a v3.0.0 para reflejar el cambio significativo de marca
+- **Concepto mejorado**: El nombre "Twin" refleja perfectamente la funcionalidad de duplicar/clonar configs
+
+### 🔄 **CAMBIOS DE MARCA**
+- **Aplicación**: Título actualizado a "DotaTwin v3.0.0"
+- **Descripción**: "Twin your Dota experience - Copy configurations between Steam accounts"
+- **Todos los archivos**: Actualizadas las referencias en código, documentación y configuración
+- **Mantiene funcionalidad**: Sin cambios en características técnicas, solo rebranding
+
+### 📁 **LIMPIEZA DE PROYECTO**
+- **Estructura organizada**: Archivos temporales eliminados, assets organizados en `config/assets/`
+- **Build config**: Archivos de PyInstaller movidos a `build_config/` 
+- **Rutas actualizadas**: Spec files con rutas relativas correctas
+- **Proyecto limpio**: Root del proyecto libre de archivos innecesarios
+
 ## [v2.1.2] - 2025-07-29 🔥 FIX CRÍTICO - Archivos .vcfg
 
 ### 🐛 **FIX CRÍTICO DE FUNCIONALIDAD**

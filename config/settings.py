@@ -1,5 +1,5 @@
 """
-Configuración centralizada de la aplicación Dota 2 Config Copier.
+Configuración centralizada de la aplicación DotaTwin.
 
 Este módulo contiene todas las configuraciones y constantes de la aplicación,
 siguiendo el principio de separación de responsabilidades.
@@ -13,11 +13,11 @@ from typing import Dict, Any
 # INFORMACIÓN DE LA APLICACIÓN
 # ═══════════════════════════════════════════════════════════════════════════
 
-APP_NAME = "Dota 2 Config Copier"
-APP_VERSION = "2.1.2"
+APP_NAME = "DotaTwin"
+APP_VERSION = "3.0.0"
 VERSION = APP_VERSION  # Alias para compatibilidad
 APP_AUTHOR = "Sadohu"
-APP_DESCRIPTION = "Aplicación para copiar configuraciones de Dota 2 entre cuentas de Steam"
+APP_DESCRIPTION = "Twin your Dota experience - Copy configurations between Steam accounts"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # RUTAS DEL SISTEMA

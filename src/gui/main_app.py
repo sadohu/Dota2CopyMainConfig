@@ -1,5 +1,5 @@
 """
-Aplicación principal de Dota 2 Config Copier - Versión modular 2.0.
+Aplicación principal de DotaTwin - Versión modular 3.0.
 
 Este módulo contiene la clase principal de la aplicación que coordina
 todos los componentes siguiendo principios de arquitectura limpia.
@@ -25,9 +25,9 @@ from config.settings import (
 )
 
 
-class Dota2ConfigCopierApp(LoggingMixin):
+class DotaTwinApp(LoggingMixin):
     """
-    Aplicación principal de Dota 2 Config Copier.
+    Aplicación principal de DotaTwin.
     
     Coordina todos los servicios y componentes de la interfaz,
     siguiendo el patrón MVC y principios de responsabilidad única.
@@ -525,13 +525,16 @@ Desarrollado por {APP_AUTHOR}
 
 {APP_DESCRIPTION}
 
-Arquitectura Modular v2.1
+🎯 Twin your Dota experience - Crea gemelos perfectos de tus configuraciones
+
+Arquitectura Modular v3.0
 - Separación de responsabilidades
 - Principios SOLID aplicados
 - Testing automatizado
 - Logging avanzado
 - Layout responsivo con Grid
 - Sistema de ignorar cuentas
+- Copia completa de configuraciones
 
 📞 Contacto y Soporte:
 Discord: Sadohu
@@ -539,7 +542,7 @@ Discord: Sadohu
 GitHub: Sadohu
 
 🔗 Repositorio del Proyecto:
-https://github.com/sadohu/Dota2CopyMainConfig
+https://github.com/sadohu/DotaTwin
 
 Steam configurado en: {self.app_config.custom_steam_path or 'Detección automática'}"""
         
@@ -626,7 +629,7 @@ def main():
     
     try:
         # Crear y ejecutar aplicación
-        app = Dota2ConfigCopierApp(root)
+        app = DotaTwinApp(root)
         
         # Mostrar información inicial
         app_info = app.get_application_info()

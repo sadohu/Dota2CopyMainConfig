@@ -1,4 +1,4 @@
-# Dependencias para Dota 2 Config Copier v2.0
+# Dependencias para DotaTwin v3.0
 # Instalación: pip install -r requirements.txt
 
 # Dependencias principales

@@ -1,27 +1,24 @@
-# 🎮![Version](https://img.shields.io/badge/version-v2.1.0-blue)
+# 🎮 DotaTwin ![Version](https://img.shields.io/badge/version-v3.0.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
 ![Language](https://img.shields.io/badge/language-Python-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 ![Architecture](https://img.shields.io/badge/architecture-modular-brightgreen)
 
-## 🚀 ¡Nuevo en v2.1! - Configuración Avanzada de Steam + Layout Mejorado
+## 🚀 ¡Nuevo en v3.0! - Rebranding como DotaTwin
 
-La versión 2.1 incluye **configuración avanzada de Steam** y **mejoras significativas en el layout** de la interfaz:
+**DotaTwin** es la evolución de Dota 2 Config Copier con un nuevo nombre que refleja perfectamente su propósito: **crear gemelos perfectos de tus configuraciones de Dota**.
 
-### 🔧 **Configuración Avanzada de Steam**
-- **Detección automática mejorada**: Busca Steam en múltiples ubicaciones
-- **Configuración manual**: Permite seleccionar ubicación personalizada cuando no se detecta
-- **Menú de configuración**: Nueva barra de menú con opciones avanzadas
-- **Persistencia**: Las rutas personalizadas se guardan automáticamente
+### ✨ **¿Qué es DotaTwin?**
+Una aplicación de escritorio que permite **duplicar configuraciones de Dota 2** entre cuentas de Steam de manera sencilla y eficiente. Como tener un "gemelo digital" de tu setup perfecto.
 
-### 🖥️ **Layout Mejorado y Responsive**
-- **Área fija para controles**: Estado y botones siempre visibles independientemente del número de cuentas
-- **Scrollbar inteligente**: Lista de cuentas con scroll cuando hay muchas cuentas
-- **Layout responsive**: Se adapta automáticamente al tamaño de la ventana
-- **Controles de paginación fijos**: Siempre accesibles en la parte superior
-- **Separación visual clara**: Mejor organización de elementos en la interfaz 2 Config Copier
+**Twin your Dota experience** - Copia configuraciones entre cuentas de Steam
 
-Una aplicación de escritorio para copiar configuraciones de Dota 2 entre cuentas de Steam de manera sencilla y eficiente.
+### 🎯 **Características Principales de v3.0**
+- **Interfaz moderna y limpia**: Rediseñada con el nuevo branding DotaTwin
+- **Arquitectura modular sólida**: Base técnica robusta y mantenible
+- **Configuración avanzada de Steam**: Detección automática y configuración manual
+- **Layout responsive**: Se adapta perfectamente a cualquier tamaño de ventana
+- **Sistema de copia completa**: Garantiza que todos los archivos .vcfg se copien correctamente
 
 ![Version](https://img.shields.io/badge/version-v2.1.0-blue)
 ![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)
