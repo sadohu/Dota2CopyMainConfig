@@ -507,6 +507,16 @@ class AboutDialog:
         self.dialog.geometry("500x400")
         self.dialog.resizable(False, False)
         
+        # Configurar icono (mismo que la aplicación principal)
+        try:
+            from config.settings import ICON_PATH
+            from pathlib import Path
+            icon_path = Path(ICON_PATH)
+            if icon_path.exists():
+                self.dialog.iconbitmap(str(icon_path))
+        except Exception:
+            pass  # Si no se puede cargar el icono, continuar sin él
+        
         # Centrar en la ventana padre
         self._center_window()
         

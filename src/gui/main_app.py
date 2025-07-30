@@ -61,6 +61,9 @@ class DotaTwinApp(LoggingMixin):
         self._setup_application()
         self._create_interface()
         self._load_initial_data()
+        
+        # Establecer icono de barra de tareas después de la inicialización completa
+        self.root.after(100, self._finalize_icon_setup)
     
     def _init_services(self) -> None:
         """Inicializa todos los servicios de la aplicación."""
@@ -92,6 +95,9 @@ class DotaTwinApp(LoggingMixin):
     
     def _setup_application(self) -> None:
         """Configura la ventana principal y propiedades de la aplicación."""
+        # Configurar App ID para Windows (ayuda con el icono de barra de tareas)
+        self._set_app_id()
+        
         # Título de la ventana
         title = f"{APP_NAME} v{APP_VERSION} - {APP_AUTHOR}"
         self.root.title(title)
@@ -104,14 +110,100 @@ class DotaTwinApp(LoggingMixin):
         icon_path = Path(ICON_PATH)
         if icon_path.exists():
             try:
+                # Establecer icono para la ventana y barra de tareas de Windows
                 self.root.iconbitmap(str(icon_path))
-            except tk.TclError:
-                self.logger.warning(f"No se pudo cargar el icono: {icon_path}")
+                
+                # Para mejor compatibilidad con Windows, también configurar wm_iconbitmap
+                self.root.wm_iconbitmap(str(icon_path))
+                
+                # Solución adicional para Windows: forzar icono en barra de tareas
+                self._set_taskbar_icon(str(icon_path))
+                
+                self.logger.info(f"Icono cargado correctamente: {icon_path}")
+                
+            except tk.TclError as e:
+                self.logger.warning(f"No se pudo cargar el icono: {icon_path} - {e}")
+        else:
+            self.logger.warning(f"Archivo de icono no encontrado: {icon_path}")
         
         # Configurar cierre de aplicación
         self.root.protocol("WM_DELETE_WINDOW", self._on_closing)
         
         self.logger.info(f"Aplicación configurada: {title}")
+    
+    def _set_app_id(self) -> None:
+        """
+        Establece el App ID de Windows para mejorar la identificación de la aplicación.
+        
+        Esto ayuda a que Windows reconozca la aplicación como única y muestre
+        el icono correcto en la barra de tareas.
+        """
+        try:
+            import ctypes
+            app_id = f"Sadohu.{APP_NAME}.{APP_VERSION}"
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+            self.logger.info(f"App ID establecido: {app_id}")
+        except Exception as e:
+            self.logger.warning(f"No se pudo establecer App ID: {e}")
+    
+    def _set_taskbar_icon(self, icon_path: str) -> None:
+        """
+        Establece el icono en la barra de tareas de Windows usando la API de Windows.
+        
+        Args:
+            icon_path: Ruta al archivo de icono
+        """
+        try:
+            import ctypes
+            from ctypes import wintypes
+            
+            # Obtener el handle de la ventana
+            hwnd = self.root.winfo_id()
+            
+            # Cargar el icono desde el archivo
+            hicon = ctypes.windll.user32.LoadImageW(
+                None,  # hInst (None para cargar desde archivo)
+                icon_path,  # name (ruta del archivo)
+                1,  # type (IMAGE_ICON)
+                0,  # cx (ancho, 0 = tamaño por defecto)
+                0,  # cy (alto, 0 = tamaño por defecto) 
+                0x00000010 | 0x00000020  # flags (LR_LOADFROMFILE | LR_DEFAULTSIZE)
+            )
+            
+            if hicon:
+                # WM_SETICON messages
+                ICON_SMALL = 0
+                ICON_BIG = 1
+                WM_SETICON = 0x0080
+                
+                # Establecer icono pequeño y grande
+                ctypes.windll.user32.SendMessageW(hwnd, WM_SETICON, ICON_SMALL, hicon)
+                ctypes.windll.user32.SendMessageW(hwnd, WM_SETICON, ICON_BIG, hicon)
+                
+                self.logger.info("Icono de barra de tareas establecido correctamente")
+            else:
+                self.logger.warning("No se pudo cargar el icono para la barra de tareas")
+                
+        except ImportError:
+            self.logger.info("ctypes no disponible, usando método estándar de Tkinter")
+        except Exception as e:
+            self.logger.warning(f"Error al establecer icono de barra de tareas: {e}")
+    
+    def _finalize_icon_setup(self) -> None:
+        """
+        Finaliza la configuración del icono después de que la ventana esté completamente cargada.
+        """
+        icon_path = Path(ICON_PATH)
+        if icon_path.exists():
+            try:
+                # Intentar establecer el icono nuevamente
+                self._set_taskbar_icon(str(icon_path))
+                
+                # Forzar actualización de la ventana
+                self.root.update_idletasks()
+                
+            except Exception as e:
+                self.logger.warning(f"Error en finalización de icono: {e}")
     
     def _create_menu(self) -> None:
         """Crea la barra de menú de la aplicación."""

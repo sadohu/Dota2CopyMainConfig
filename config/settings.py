@@ -25,7 +25,7 @@ APP_DESCRIPTION = "Twin your Dota experience - Copy configurations between Steam
 
 # Rutas base del proyecto
 PROJECT_ROOT = Path(__file__).parent.parent
-ASSETS_DIR = PROJECT_ROOT / "assets"
+ASSETS_DIR = PROJECT_ROOT / "config" / "assets"
 CONFIG_DIR = PROJECT_ROOT / "config"
 DOCS_DIR = PROJECT_ROOT / "docs"
 
@@ -35,7 +35,7 @@ AVATAR_CACHE_PATH = Path(r"C:\Program Files (x86)\Steam\config\avatarcache")
 
 # Archivos de configuración
 CACHE_FILE = "ultima_seleccion.json"
-ICON_PATH = "dota2.ico"
+ICON_PATH = ASSETS_DIR / "dota2.ico"
 LOG_FILE = "app.log"
 
 # ═══════════════════════════════════════════════════════════════════════════

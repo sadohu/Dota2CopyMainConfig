@@ -25,6 +25,41 @@ y este proyecto adhiere a [Versionado Semántico](https://semver.org/lang/es/).
   - **Solución**: Consistencia en grid layout y agregado `frame.pack()` en PaginationWidget
   - **Resultado**: Controles de paginación ahora visibles cuando hay múltiples páginas
 
+- **Icono de Barra de Tareas**: Implementado icono personalizado en barra de tareas de Windows
+  - **Problema**: Al ejecutar como script Python, se mostraba icono de Python en lugar del icono de la app
+  - **Solución**: Implementada API de Windows usando `ctypes` para forzar icono personalizado
+  - **Mejoras técnicas**: 
+    - App ID único de Windows (`Sadohu.DotaTwin.3.0.0`)
+    - Uso de `LoadImageW()` y `SendMessageW()` para establecer iconos pequeño/grande
+    - Configuración tardía con `root.after()` para máxima compatibilidad
+  - **Resultado**: DotaTwin ahora muestra su icono `dota2.ico` en ventana, diálogos y barra de tareas
+
+### 📁 **LIMPIEZA DE PROYECTO**
+- **Estructura organizada**: Archivos temporales eliminados, assets organizados en `config/assets/`
+- **Build config**: Archivos de PyInstaller movidos a `build_config/` 
+- **Rutas actualizadas**: Spec files con rutas relativas correctas
+- **Proyecto limpio**: Root del proyecto libre de archivos innecesarios
+
+## [v3.0.0] - 2025-07-29 🎯 REBRANDING: DOTATWIN
+
+### 🚀 **REBRANDING COMPLETO**
+- **Nuevo nombre**: "Dota 2 Config Copier" → **"DotaTwin"**
+- **Nueva identidad**: "Twin your Dota experience" - Crear gemelos perfectos de configuraciones
+- **Versión mayor**: Incremento a v3.0.0 para reflejar el cambio significativo de marca
+- **Concepto mejorado**: El nombre "Twin" refleja perfectamente la funcionalidad de duplicar/clonar configs
+
+### 🔄 **CAMBIOS DE MARCA**
+- **Aplicación**: Título actualizado a "DotaTwin v3.0.0"
+- **Descripción**: "Twin your Dota experience - Copy configurations between Steam accounts"
+- **Todos los archivos**: Actualizadas las referencias en código, documentación y configuración
+- **Mantiene funcionalidad**: Sin cambios en características técnicas, solo rebranding
+
+### � **MINOR FIXES**
+- **GUI Paginación**: Corregido problema donde los controles de paginación no se mostraban visualmente
+  - **Causa**: Inconsistencia en layout managers (mixing pack/grid) y falta de posicionamiento del frame
+  - **Solución**: Consistencia en grid layout y agregado `frame.pack()` en PaginationWidget
+  - **Resultado**: Controles de paginación ahora visibles cuando hay múltiples páginas
+
 ### �📁 **LIMPIEZA DE PROYECTO**
 - **Estructura organizada**: Archivos temporales eliminados, assets organizados en `config/assets/`
 - **Build config**: Archivos de PyInstaller movidos a `build_config/` 
